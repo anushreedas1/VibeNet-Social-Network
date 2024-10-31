@@ -2,16 +2,24 @@ import "./App.css";
 import Pages from "./Components/Pages/Pages";
 import { BrowserRouter } from "react-router-dom";
 import AppContext from "./Components/AppContext/AppContext";
+import { AnimatedCursor } from "./Components/AnimatedCursor";
+import { AnimatePresence } from "framer-motion";
+import Background from "./Components/Background/Background";
 
 function App() {
   return (
-    <h1 className="App">
+    <div className="relative">
       <BrowserRouter>
         <AppContext>
-          <Pages></Pages>
+          <Background>
+            <AnimatedCursor />
+            <AnimatePresence mode="wait">
+              <Pages />
+            </AnimatePresence>
+          </Background>
         </AppContext>
       </BrowserRouter>
-    </h1>
+    </div>
   );
 }
 

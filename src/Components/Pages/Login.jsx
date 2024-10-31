@@ -13,11 +13,39 @@ import * as Yup from "yup";
 import ClipLoader from "react-spinners/ClipLoader";
 import { AuthContext } from "../AppContext/AppContext";
 import { auth, onAuthStateChanged } from "../firebase/firebase";
+import NET from 'vanta/dist/vanta.net.min';
+import * as THREE from 'three';
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const { signInWithGoogle, loginWithEmailAndPassword } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [vantaEffect, setVantaEffect] = useState(null);
+
+  useEffect(() => {
+    if (!vantaEffect) {
+      setVantaEffect(NET({
+        el: document.body,
+        THREE: THREE,
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        scale: 1.00,
+        scaleMobile: 1.00,
+        color: 0x0,
+        backgroundColor: 0x111111,
+        points: 20.00,
+        maxDistance: 30.00,
+        spacing: 20.00,
+        showDots: false
+      }))
+    }
+    return () => {
+      if (vantaEffect) vantaEffect.destroy()
+    }
+  }, [vantaEffect])
 
   useEffect(() => {
     setLoading(true);
@@ -56,99 +84,90 @@ const Login = () => {
     }
   };
 
-  const formik = useFormik({ initialValues, validationSchema, handleSubmit });
+  const formik = useFormik({ initialValues, validationSchema, onSubmit: handleSubmit });
 
   return (
-    <>
+    <div className="flex items-center justify-center min-h-screen">
       {loading ? (
-        <div className="grid grid-cols-1 justify-items-center items-center h-screen">
-          <ClipLoader color="#367fd6" size={150} speedMultiplier={0.5} />
+        <div className="grid grid-cols-1 justify-items-center items-center">
+          <ClipLoader color="#ffffff" size={150} speedMultiplier={0.5} />
         </div>
       ) : (
-        <div className="flex items-center justify-center h-screen bg-gradient-to-r from-purple-500 to-blue-500">
-          <div className="flex flex-col items-center">
-            <Typography
-              variant="h2"
-              color="white"
-              className="mb-10 font-bold text-4xl"
-            >
-              Welcome Back!
+        <Card className="w-96 bg-white/90 backdrop-filter backdrop-blur-sm"> 
+          <CardHeader
+            variant="gradient"
+            className="mb-4 grid h-28 place-items-center bg-gradient-to-r from-purple-700 to-blue-500"
+          >
+            <Typography variant="h3" color="white">
+              LOGIN
             </Typography>
-
-            <Card className="w-96 bg-gray-800 shadow-lg rounded-lg">
-              <CardHeader
+          </CardHeader>
+          <CardBody className="flex flex-col gap-4">
+            <form onSubmit={formik.handleSubmit}>
+              <div className="mb-2">
+                <Input
+                  name="email"
+                  type="email"
+                  label="Email"
+                  size="lg"
+                  {...formik.getFieldProps("email")}
+                />
+                {formik.touched.email && formik.errors.email && (
+                  <Typography variant="small" color="red">
+                    {formik.errors.email}
+                  </Typography>
+                )}
+              </div>
+              <div className="mt-4 mb-2">
+                <Input
+                  name="password"
+                  type="password"
+                  label="Password"
+                  size="lg"
+                  {...formik.getFieldProps("password")}
+                />
+                {formik.touched.password && formik.errors.password && (
+                  <Typography variant="small" color="red">
+                    {formik.errors.password}
+                  </Typography>
+                )}
+              </div>
+              <Button
                 variant="gradient"
-                className="mb-4 h-20 grid place-items-center bg-gradient-to-r from-purple-700 to-blue-500 rounded-t-lg"
+                fullWidth
+                className="mt-6"
+                type="submit"
               >
-                <Typography variant="h4" color="white">
-                  Login
-                </Typography>
-              </CardHeader>
-              <CardBody className="flex flex-col gap-6 px-8">
-                <form onSubmit={handleSubmit}>
-                  <div>
-                    <Input
-                      name="email"
-                      type="email"
-                      label="E-mail"
-                      size="lg"
-                      className="bg-white text-black placeholder-black border border-gray-400 p-2 rounded"
-                      {...formik.getFieldProps("email")}
-                    />
-                    {formik.touched.email && formik.errors.email && (
-                      <Typography variant="small" color="red" className="mt-1 font-bold">
-                        {formik.errors.email}
-                      </Typography>
-                    )}
-                  </div>
-                  <div className="mt-4">
-                    <Input
-                      name="password"
-                      type="password"
-                      label="Password"
-                      size="lg"
-                      className="bg-white text-black placeholder-black border border-gray-400 p-2 rounded"
-                      {...formik.getFieldProps("password")}
-                    />
-                    {formik.touched.password && formik.errors.password && (
-                      <Typography variant="small" color="red" className="mt-1 font-bold">
-                        {formik.errors.password}
-                      </Typography>
-                    )}
-                  </div>
-                  <Button
-                    variant="gradient"
-                    fullWidth
-                    className="mt-6 bg-black text-white border border-gray-400"
-                    type="submit"
-                  >
-                    Login
-                  </Button>
-                </form>
-              </CardBody>
-              <CardFooter className="pt-0 px-8 pb-4">
-                <Button
-                  variant="gradient"
-                  fullWidth
-                  className="mb-4 bg-black text-white border border-gray-400"
-                  onClick={signInWithGoogle}
-                >
-                  Sign In with Google
-                </Button>
-                <div className="flex justify-between text-white text-sm">
-                  <Link to="/reset" className="hover:underline">
-                    Forgot password?
-                  </Link>
-                  <Link to="/register" className="hover:underline">
-                    Don't have an account? Signup
-                  </Link>
-                </div>
-              </CardFooter>
-            </Card>
-          </div>
-        </div>
+                Login
+              </Button>
+            </form>
+          </CardBody>
+          <CardFooter className="pt-0">
+            <Button
+              variant="gradient"
+              fullWidth
+              className="mb-4"
+              onClick={signInWithGoogle}
+            >
+              Sign In with Google
+            </Button>
+            <Link to="/reset">
+              <p className="ml-1 font-bold font-roboto text-sm text-blue-500 text-center">
+                Reset the password
+              </p>
+            </Link>
+            <div className="mt-6 flex items-center font-roboto text-base justify-center">
+              Don't have an account?
+              <Link to="/register">
+                <p className="ml-1 font-bold font-roboto text-sm text-blue-500 text-center">
+                  Register
+                </p>
+              </Link>
+            </div>
+          </CardFooter>
+        </Card>
       )}
-    </>
+    </div>
   );
 };
 

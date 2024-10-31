@@ -31,7 +31,7 @@ export const cardData = [
   },
   {
     id: "5",
-    name: "Jones",
+    name: "Johhny",
     image: card5,
     status: "Offline",
   },
