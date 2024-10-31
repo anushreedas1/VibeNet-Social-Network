@@ -1,29 +1,24 @@
 import React from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Login from "./Login";
-import Register from "./Regsiter";
+import Register from "./Regsiter"; // Correct spelling
 import Reset from "./Reset";
 import Home from "./Home";
 import FriendProfile from "./FriendProfile";
-import Navbar from "../Navbar/Navbar";
+import Support from "../CustomerSupport/Support"; // Adjust the path correctly
 
 const Pages = () => {
-  const location = useLocation();
-
-  // Array of paths where Navbar should not be shown
-  const noNavbarRoutes = ['/login', '/register', '/reset'];
-
   return (
-    <>
-      {!noNavbarRoutes.includes(location.pathname) && <Navbar />}
+    <div>
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/reset" element={<Reset />} />
         <Route path="/profile/:id" element={<FriendProfile />} />
-        <Route path="/" element={<Home />} />
+        <Route path="/customer-support" element={<Support />} /> {/* Route to support page */}
       </Routes>
-    </>
+    </div>
   );
 };
 

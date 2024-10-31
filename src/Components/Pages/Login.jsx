@@ -45,7 +45,7 @@ const Login = () => {
     return () => {
       if (vantaEffect) vantaEffect.destroy()
     }
-  }, [vantaEffect])
+  }, [vantaEffect]);
 
   useEffect(() => {
     setLoading(true);
@@ -162,6 +162,14 @@ const Login = () => {
                 <p className="ml-1 font-bold font-roboto text-sm text-blue-500 text-center">
                   Register
                 </p>
+              </Link>
+            </div>
+            {/* Customer Support Button */}
+            <div className="mt-4 flex justify-start w-full">
+              <Link to="/CustomerSupport/Support" className="text-blue-500 hover:text-blue-700 transition-colors">
+                <Button variant="outlined" className="text-blue-500 border-blue-500">
+                  Customer Support
+                </Button>
               </Link>
             </div>
           </CardFooter>

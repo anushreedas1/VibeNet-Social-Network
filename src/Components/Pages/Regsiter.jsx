@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Card,
   CardHeader,
@@ -12,25 +12,26 @@ import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import ClipLoader from "react-spinners/ClipLoader";
-import { AuthContext } from "../AppContext/AppContext";
-import { auth, onAuthStateChanged } from "../firebase/firebase";
+import { AuthContext } from "../AppContext/AppContext"; // Ensure you're importing AuthContext
+import { auth, onAuthStateChanged, createUserWithEmailAndPassword } from "../firebase/firebase";
 
-const Register = () => {
+const Register = () => {  // Corrected spelling from "Regsiter" to "Register"
   const [loading, setLoading] = useState(false);
-  const { registerWithEmailAndPassword } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { setUser } = useContext(AuthContext); // Access setUser from context
 
   useEffect(() => {
     setLoading(true);
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
+        setUser(user); // Set user state in context
         navigate("/");
-        setLoading(false);
-      } else {
-        setLoading(false);
       }
+      setLoading(false);
     });
-  }, [navigate]);
+    
+    return () => unsubscribe(); // Cleanup subscription on unmount
+  }, [navigate, setUser]);
 
   const initialValues = {
     name: "",
@@ -42,22 +43,31 @@ const Register = () => {
     name: Yup.string()
       .required("Required")
       .min(4, "Must be at least 4 characters long")
-      .matches(/^[a-zA-Z]+$/, "Name can only contain letters"),
+      .matches(/^[a-zA-Z\s]+$/, "Name can only contain letters"),
     email: Yup.string().email("Invalid email address").required("Required"),
     password: Yup.string()
       .required("Required")
       .min(6, "Must be at least 6 characters long")
-      .matches(/^[a-zA-Z]+ $/, "Password can only contain letters"),
+      .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()]+$/, "Password must contain letters and numbers"),
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const { name, email, password } = formik.values;
+    const { email, password } = formik.values;
+
     if (formik.isValid) {
-      registerWithEmailAndPassword(name, email, password);
       setLoading(true);
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user; // Get user info from userCredential
+        setUser(user); // Set user state in context
+        navigate("/");  // Navigate after successful registration
+      } catch (error) {
+        alert("Registration failed: " + error.message);
+      } finally {
+        setLoading(false);
+      }
     } else {
-      setLoading(false);
       alert("Check your input fields");
     }
   };
