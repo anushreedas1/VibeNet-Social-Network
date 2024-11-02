@@ -50,7 +50,7 @@ const Login = () => {
 
   useEffect(() => {
     setLoading(true);
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, (user) => {
       if (user) {
         navigate("/");
         setLoading(false);
@@ -58,10 +58,9 @@ const Login = () => {
         setLoading(false);
       }
     });
-    return () => unsubscribe(); // Cleanup subscription
   }, [navigate]);
 
-  const initialValues = {
+  let initialValues = {
     email: "",
     password: "",
   };
@@ -77,16 +76,17 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const { email, password } = formik.values;
-    if (formik.isValid) {
+    if (formik.isValid === true) {
       loginWithEmailAndPassword(email, password);
       setLoading(true);
     } else {
       setLoading(false);
       alert("Check your input fields");
     }
+    console.log("formik", formik);
   };
 
-  const formik = useFormik({ initialValues, validationSchema, onSubmit: handleSubmit });
+  const formik = useFormik({ initialValues, validationSchema, handleSubmit });
 
   return (
     <div className="flex items-center justify-center min-h-screen">

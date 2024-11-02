@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Button = ({ label, onClick }) => {
+const Button = ({ label, onClick, type = "button" }) => {
   return (
     <StyledWrapper>
-      <button className="button" onClick={onClick}>
+      <button className="button" onClick={onClick} type={type}>
         <span className="button_lg">
           <span className="button_sl" />
           <span className="button_text">{label}</span>
@@ -12,7 +12,7 @@ const Button = ({ label, onClick }) => {
       </button>
     </StyledWrapper>
   );
-}
+};
 
 const StyledWrapper = styled.div`
   .button {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   Card,
   CardHeader,
@@ -12,28 +12,27 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import ClipLoader from "react-spinners/ClipLoader";
 import { AuthContext } from "../AppContext/AppContext";
-import { auth, onAuthStateChanged, createUserWithEmailAndPassword } from "../firebase/firebase";
+import { auth, onAuthStateChanged } from "../firebase/firebase";
 import Button from "./Button"; // Adjust the import path as necessary
 
 const Register = () => {
   const [loading, setLoading] = useState(false);
-  const { setUser } = useContext(AuthContext);
+  const { registerWithEmailAndPassword } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUser(user);
         navigate("/");
+        setLoading(false);
+      } else {
+        setLoading(false);
       }
-      setLoading(false);
     });
-    
-    return () => unsubscribe(); // Cleanup subscription
-  }, [navigate, setUser]);
+  }, [navigate]);
 
-  const initialValues = {
+  let initialValues = {
     name: "",
     email: "",
     password: "",
@@ -42,41 +41,29 @@ const Register = () => {
   const validationSchema = Yup.object({
     name: Yup.string()
       .required("Required")
-      .min(4, "Must be at least 4 characters long")
-      .matches(/^[a-zA-Z\s]+$/, "Name can only contain letters"),
+      .min("4", "Must be at least 4 characters long")
+      .matches(/^[a-zA-Z]+$/, "Name can only contain letters"),
     email: Yup.string().email("Invalid email address").required("Required"),
     password: Yup.string()
       .required("Required")
-      .min(6, "Must be at least 6 characters long")
-      .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()]+$/, "Password must contain letters and numbers"),
+      .min("6", "Must be at least 6 characters long")
+      .matches(/^[a-zA-Z]+$/, "Password can only contain letters"),
   });
 
-  const handleSubmit = async (e) => {
+  const handleRegister = (e) => {
     e.preventDefault();
     const { name, email, password } = formik.values;
-
-    if (formik.isValid) {
+    if (formik.isValid === true) {
+      registerWithEmailAndPassword(name, email, password);
       setLoading(true);
-      try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-        setUser(user);
-        navigate("/");
-      } catch (error) {
-        alert("Registration failed: " + error.message);
-      } finally {
-        setLoading(false);
-      }
     } else {
+      setLoading(false);
       alert("Check your input fields");
     }
   };
 
-  const formik = useFormik({
-    initialValues,
-    validationSchema,
-    onSubmit: handleSubmit,
-  });
+  const formik = useFormik({ initialValues, validationSchema, handleRegister });
+
 
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -96,7 +83,7 @@ const Register = () => {
           </CardHeader>
 
           <CardBody className="flex flex-col gap-4">
-            <form onSubmit={formik.handleSubmit}>
+            <form onSubmit={handleRegister}>
               <div className="mb-2">
                 <Input
                   name="name"
@@ -119,6 +106,8 @@ const Register = () => {
                   size="lg"
                   {...formik.getFieldProps("email")}
                 />
+              </div>
+              <div>
                 {formik.touched.email && formik.errors.email && (
                   <Typography variant="small" color="red">
                     {formik.errors.email}
