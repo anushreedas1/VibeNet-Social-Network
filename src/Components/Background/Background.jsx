@@ -1,42 +1,38 @@
-import React, { useEffect, useRef } from 'react';
-import NET from 'vanta/dist/vanta.net.min';
-import * as THREE from 'three';
+import React, { useState, useEffect, useRef } from "react";
+import NET from "vanta/dist/vanta.net.min";
 
-const Background = ({ children }) => {
-  const vantaRef = useRef(null);
-  const vantaEffect = useRef(null);
+import "./Background.css";
 
+const Background = (props) => {
+  const [vantaEffect, setVantaEffect] = useState(0);
+  const myRef = useRef(null);
   useEffect(() => {
-    if (!vantaEffect.current) {
-      vantaEffect.current = NET({
-        el: vantaRef.current,
-        THREE,
-        mouseControls: true,
-        touchControls: true,
-        gyroControls: false,
-        minHeight: 200.00,
-        minWidth: 200.00,
-        scale: 1.00,
-        scaleMobile: 1.00,
-        color: 0x0,
-        backgroundColor: 0x111111,
-        points: 20.00,
-        maxDistance: 30.00,
-        spacing: 20.00,
-        showDots: false
-      });
+    if (!vantaEffect) {
+      setVantaEffect(
+        NET({
+          el: myRef.current,
+          mouseControls: true,
+          touchControls: true,
+          gyroControls: false,
+          minHeight: 200.0,
+          minWidth: 200.0,
+          scale: 1.0,
+          scaleMobile: 1.0,
+          color: 0xffbc2020,
+          backgroundColor: 0xff141414,
+          points: 20.0,
+          maxDistance: 25.0,
+          spacing: 20.0,
+        })
+      );
     }
-
     return () => {
-      if (vantaEffect.current) vantaEffect.current.destroy();
+      if (vantaEffect) vantaEffect.destroy();
     };
-  }, []);
-
+  }, [vantaEffect]);
   return (
-    <div ref={vantaRef} className="fixed inset-0 -z-10">
-      <div className="relative z-10 min-h-screen">
-        {children}
-      </div>
+    <div id="vanta-canvas" ref={myRef}>
+      {props.children}
     </div>
   );
 };

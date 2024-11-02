@@ -1,335 +1,128 @@
-.supportChild {
-  position: absolute;
-  top: 62px;
-  left: 798px;
-  border-radius: 50%;
-  background: linear-gradient(180deg, #61003a, #2d0a30);
-  width: 302px;
-  height: 302px;
-}
-.groupChild {
-  position: absolute;
-  top: 39.72px;
-  left: 0px;
-  border-radius: 50px;
-  background-color: rgba(175, 179, 255, 0);
-  border: 1px solid #656ed3;
-  box-sizing: border-box;
-  width: 446.4px;
-  height: 45px;
-}
-.groupItem {
-  position: absolute;
-  top: 140.35px;
-  left: 0px;
-  border-radius: 50px;
-  background-color: rgba(175, 179, 255, 0);
-  border: 1px solid #656ed3;
-  box-sizing: border-box;
-  width: 446.4px;
-  height: 45px;
-}
-.groupInner {
-  position: absolute;
-  top: 262.17px;
-  left: 2.43px;
-  border-radius: 20px;
-  background-color: rgba(175, 179, 255, 0);
-  border: 1px solid #656ed3;
-  box-sizing: border-box;
-  width: 446.4px;
-  height: 215.8px;
-}
-.fullName {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  display: inline-block;
-  width: 96.1px;
-  height: 25.2px;
-}
-.email {
-  position: absolute;
-  top: 100.63px;
-  left: 2.43px;
-  display: inline-block;
-  width: 54.7px;
-  height: 25.2px;
-}
-.message {
-  position: absolute;
-  top: 222.45px;
-  left: 4.87px;
-  display: inline-block;
-  width: 88.8px;
-  height: 25.2px;
-}
-.rectangleParent {
-  position: absolute;
-  top: 196px;
-  left: 876px;
-  width: 448.8px;
-  height: 552px;
-}
-.niceHearingFrom {
-  position: absolute;
-  top: 399px;
-  left: 98px;
-  color: #656ed3;
-}
-.frameChild {
-  position: absolute;
-  top: 218px;
-  left: 855px;
-  background-color: #ebefff;
-  width: 530px;
-  height: 63px;
-}
-.frameItem {
-  position: absolute;
-  top: 324px;
-  left: 855px;
-  background-color: #ebefff;
-  width: 514px;
-  height: 85px;
-}
-.username {
-  position: absolute;
-  top: 229px;
-  left: 873px;
-  border-radius: 12px;
-  border: 1px solid #000;
-  box-sizing: border-box;
-  width: 451px;
-  height: 57px;
-}
-.username1 {
-  position: absolute;
-  top: 338px;
-  left: 870px;
-  border-radius: 12px;
-  border: 1px solid #000;
-  box-sizing: border-box;
-  width: 451px;
-  height: 57px;
-}
-.frameInner {
-  position: absolute;
-  top: 452.5px;
-  left: 863px;
-  width: 475px;
-  height: 236px;
-}
-.username2 {
-  position: absolute;
-  top: 457px;
-  left: 870px;
-  border-radius: 12px;
-  border: 1px solid #000;
-  box-sizing: border-box;
-  width: 451px;
-  height: 218px;
-}
-.submit {
-  width: 160px;
-  position: relative;
-  font-weight: 500;
-  display: inline-block;
-  height: 16px;
-  flex-shrink: 0;
-}
-.submitWrapper {
-  position: absolute;
-  top: 705px;
-  left: 1157px;
-  border-radius: 12px;
-  background-color: #656ed3;
-  width: 160px;
-  height: 38px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  padding: 0px 59px;
-  box-sizing: border-box;
-  text-align: center;
-  color: #fff;
-}
-.groupParent {
-  position: absolute;
-  top: 0px;
-  left: -36px;
-  border-radius: 174px;
-  background-color: #ebefff;
-  width: 1489px;
-  height: 772px;
-  overflow: hidden;
-  font-size: 16px;
-}
-.supportItem {
-  position: absolute;
-  top: 410px;
-  left: 116px;
-  border-radius: 50%;
-  background-color: #afb3ff;
-  width: 593px;
-  height: 593px;
-}
-.touch {
-  color: #656ed3;
-}
-.letsGetInContainer {
-  position: relative;
-}
-.haveAQuestion {
-  margin: 0;
-}
-.haveAQuestionContainer {
-  width: 340px;
-  position: relative;
-  font-size: 16px;
-  color: #1a1a1a;
-  display: inline-block;
-  flex-shrink: 0;
-  margin-left: -87px;
-}
-.letsGetInTouchParent {
-  position: absolute;
-  top: 166px;
-  left: 53px;
-  width: 510px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  font-size: 48px;
-}
-.longHairedGirlWatchingThroIcon {
-  position: absolute;
-  top: 266px;
-  left: 206px;
-  width: 514px;
-  height: 609px;
-  object-fit: contain;
-}
-.socialMediaIcons {
-  position: absolute;
-  height: 4.41%;
-  width: 11.88%;
-  top: 92.87%;
-  right: 84.1%;
-  bottom: 2.72%;
-  left: 4.03%;
-  max-width: 100%;
-  overflow: hidden;
-  max-height: 100%;
-}
-.contactUs {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  font-weight: 500;
-  display: inline-block;
-  width: 213.1px;
-}
-.div {
-  position: absolute;
-  top: 3px;
-  left: 41.06px;
-  letter-spacing: 0.18em;
-  font-weight: 500;
-  display: inline-block;
-  width: 176.4px;
-}
-.vibenetgmailcom {
-  position: absolute;
-  top: 41px;
-  left: 41.06px;
-  font-weight: 500;
-  display: inline-block;
-  width: 221.9px;
-}
-.vitVelloreInstitute {
-  position: absolute;
-  top: 78px;
-  left: 41.06px;
-  font-weight: 500;
-  display: inline-block;
-  width: 185.3px;
-}
-.icbaselinePhoneIcon {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 27.7px;
-  height: 25px;
-  overflow: hidden;
-}
-.icbaselineEmailIcon {
-  position: absolute;
-  top: 39px;
-  left: 3.33px;
-  width: 27.7px;
-  height: 25px;
-  overflow: hidden;
-}
-.mdiaddressMarkerIcon {
-  position: absolute;
-  top: 78px;
-  left: 0px;
-  width: 27.7px;
-  height: 25px;
-  overflow: hidden;
-}
-.conrtacrt {
-  position: absolute;
-  top: 64px;
-  left: 0px;
-  width: 263px;
-  height: 116px;
-  font-size: 16px;
-  color: #fdf7f7;
-}
-.contactUsParent {
-  position: absolute;
-  top: 814px;
-  left: 1077px;
-  width: 263px;
-  height: 180px;
-  color: #4f59c0;
-}
-.net {
-  color: #000;
-}
-.vibenet {
-  position: relative;
-  font-weight: 600;
-}
-.vibenetWrapper {
-  position: absolute;
-  top: 778px;
-  left: 93px;
-  border: 4px solid #fff;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-  padding: 14px 24px;
-  color: #fff;
-  font-family: 'Noto Sans';
-}
 .support {
-  width: 100%;
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(135deg, #f0f2ff 50%, #141414 50%) !important;
+  font-family: 'Inter', sans-serif;
   position: relative;
-  background-color: #0f0f0f;
-  height: 1024px;
-  overflow: hidden;
-  text-align: left;
-  font-size: 32px;
-  color: #000;
-  font-family: Inter;
+  z-index: 0;
 }
 
+.leftSection {
+  flex: 1;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #333;
+}
+
+.heading {
+  font-size: 2em;
+  margin: 0;
+}
+
+.touch {
+  color: #5a67d8;
+}
+
+.subheading {
+  font-size: 1em;
+  margin-top: 10px;
+  color: #666;
+  text-align: center;
+}
+
+.niceToHear {
+  color: #5a67d8;
+  margin-top: 30px;
+}
+
+.binocularImage {
+  width: 250px;
+  border-radius: 50%;
+  margin-top: 20px;
+}
+
+.socialMediaIcons {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.brand {
+  margin-top: 40px;
+  font-size: 1.2em;
+  color: #333;
+}
+
+.net {
+  color: #5a67d8;
+}
+
+.rightSection {
+  flex: 1;
+  padding: 50px;
+  background-color: #f8f9fc;
+  border-radius: 20px 0 0 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.contactForm {
+  width: 80%;
+  max-width: 400px;
+}
+
+.label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.input, .textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0 20px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 1em;
+}
+
+.textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 12px;
+  font-size: 1em;
+  color: #fff;
+  background-color: #5a67d8;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.submitButton:hover {
+  background-color: #4c51bf;
+}
+
+.contactDetails {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.contactDetails h2 {
+  color: #333;
+}
+
+.contactDetails p {
+  color: #666;
+  font-size: 0.9em;
+}

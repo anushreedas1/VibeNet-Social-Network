@@ -166,7 +166,7 @@ const Login = () => {
             </div>
             {/* Customer Support Button */}
             <div className="mt-4 flex justify-start w-full">
-              <Link to="/customer-support" className="text-blue-500 hover:text-blue-700 transition-colors">
+              <Link to="../CustomerSupport/Support.tsx" className="text-blue-500 hover:text-blue-700 transition-colors">
                 <Button variant="outlined" className="text-blue-500 border-blue-500">
                   Customer Support
                 </Button>

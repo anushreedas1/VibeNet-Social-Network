@@ -3,67 +3,43 @@ import styles from './Supportmodule.css';
 
 const Support: FunctionComponent = () => {
   return (
-    <div className={styles.support}>
-      <div className={styles.supportChild} />
-      <div className={styles.groupParent}>
-        <div className={styles.rectangleParent}>
-          <div className={styles.groupChild} />
-          <div className={styles.groupItem} />
-          <div className={styles.groupInner} />
-          <div className={styles.fullName}>Full Name:</div>
-          <div className={styles.email}>Email:</div>
-          <div className={styles.message}>Message:</div>
+    <div className={styles.support} style={{ background: 'linear-gradient(135deg, #f0f2ff 50%, #141414 50%)' }}>
+      <div className={styles.support}>
+      <div className={styles.leftSection}>
+        <h1 className={styles.heading}>
+          Let's Get in <span className={styles.touch}>Touch!</span>
+        </h1>
+        <p className={styles.subheading}>
+          Have a question or need assistance? Reach out to us via email, phone, or the contact form below. We're eager to assist you.
+        </p>
+        <p className={styles.niceToHear}>Nice hearing from you!</p>
+        <img className={styles.binocularImage} alt="Girl looking through binoculars" src="long-haired-girl-watching-through-binoculars.png" />
+        <div className={styles.socialMediaIcons}>
+          <img src="facebook-icon.png" alt="Facebook" />
+          <img src="whatsapp-icon.png" alt="WhatsApp" />
+          <img src="telegram-icon.png" alt="Telegram" />
         </div>
-        <b className={styles.niceHearingFrom}>Nice hearing from you!</b>
-        <div className={styles.frameChild} />
-        <div className={styles.frameItem} />
-        <div className={styles.username} />
-        <div className={styles.username1} />
-        <img className={styles.frameInner} alt="" src="Rectangle 7.svg" />
-        <div className={styles.username2} />
-        <div className={styles.submitWrapper}>
-          <div className={styles.submit}>
-            <p className={styles.haveAQuestion}>Submit</p>
-          </div>
+        <div className={styles.brand}>
+          <span>Vibe</span><span className={styles.net}>Net</span>
         </div>
       </div>
-      <div className={styles.supportItem} />
-      <div className={styles.letsGetInTouchParent}>
-        <div className={styles.letsGetInContainer}>
-          <span>{`Lets Get in `}</span>
-          <b className={styles.touch}>Touch!</b>
-        </div>
-        <div className={styles.haveAQuestionContainer}>
-          <p className={styles.haveAQuestion}>
-            {`Have a question or need assistance? Reach out to us via email, `}
-          </p>
-          <p className={styles.haveAQuestion}>
-            phone, or the contact form below. We're eager to assist you.
-          </p>
-        </div>
-      </div>
-      <img
-        className={styles.longHairedGirlWatchingThroIcon}
-        alt=""
-        src="long-haired-girl-watching-through-binoculars (2) 1.png"
-      />
-      <img className={styles.socialMediaIcons} alt="" src="Social media icons.svg" />
-      <div className={styles.contactUsParent}>
-        <div className={styles.contactUs}>Contact Us:</div>
-        <div className={styles.conrtacrt}>
-          <div className={styles.div}>+91 9203904734</div>
-          <div className={styles.vibenetgmailcom}>vibenet@gmail.com</div>
-          <div className={styles.vitVelloreInstitute}>VIT (Vellore Institute of Technology)</div>
-          <img className={styles.icbaselinePhoneIcon} alt="" src="ic:baseline-phone.svg" />
-          <img className={styles.icbaselineEmailIcon} alt="" src="ic:baseline-email.svg" />
-          <img className={styles.mdiaddressMarkerIcon} alt="" src="mdi:address-marker.svg" />
+      <div className={styles.rightSection}>
+        <form className={styles.contactForm}>
+          <label className={styles.label}>Full Name:</label>
+          <input className={styles.input} type="text" placeholder="Your Name" />
+          <label className={styles.label}>Email:</label>
+          <input className={styles.input} type="email" placeholder="Your Email" />
+          <label className={styles.label}>Message:</label>
+          <textarea className={styles.textarea} placeholder="Your Message"></textarea>
+          <button className={styles.submitButton} type="submit">Submit</button>
+        </form>
+        <div className={styles.contactDetails}>
+          <h2>Contact Us:</h2>
+          <p>+91 9203904734</p>
+          <p>vibenet@gmail.com</p>
+          <p>VIT (Vellore Institute of Technology)</p>
         </div>
       </div>
-      <div className={styles.vibenetWrapper}>
-        <i className={styles.vibenet}>
-          <span>Vibe</span>
-          <span className={styles.net}>Net</span>
-        </i>
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import Register from "./Regsiter"; // Correct spelling
 import Reset from "./Reset";
 import Home from "./Home";
 import FriendProfile from "./FriendProfile";
-import Support from "../CustomerSupport/Support"; // Adjust the path correctly
+import Support from "./Support"; // Adjust the path correctly
 
 const Pages = () => {
   return (
@@ -16,7 +16,7 @@ const Pages = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/reset" element={<Reset />} />
         <Route path="/profile/:id" element={<FriendProfile />} />
-        <Route path="/customer-support" element={<Support />} /> {/* Route to support page */}
+        <Route path="/customer-support" element={<Support />} />
       </Routes>
     </div>
   );
