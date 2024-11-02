@@ -24,14 +24,20 @@ const StyledWrapper = styled.div`
     color: #0f1923;
     cursor: pointer;
     position: relative;
-    padding: 8px;
-    margin-bottom: 20px;
+    width: 100%; /* Make the button full width */
+    height: 48px; /* Set a fixed height for uniformity */
+    padding: 8px; /* Adjust padding as needed */
+    margin-bottom: 0px; /* Reduce margin to bring buttons closer together */
     text-transform: uppercase;
     font-weight: bold;
     font-size: 14px;
-    transition: all .15s ease;
+    text-align: center; /* Center the text */
+    transition: all 0.15s ease;
+    background-color: #e0e0e0; /* Optional: Set a background color for buttons */
+    border-radius: 4px; /* Optional: Add border radius for rounded corners */
   }
 
+  /* Other styles remain unchanged */
   .button::before,
   .button::after {
     content: '';
@@ -110,7 +116,7 @@ const StyledWrapper = styled.div`
     display: block;
     position: absolute;
     top: 0;
-    bottom: -1px;
+    bottom: 0px;
     left: -8px;
     width: 0;
     background-color: #ff4655;

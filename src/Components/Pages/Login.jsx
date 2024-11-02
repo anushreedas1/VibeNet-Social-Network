@@ -135,11 +135,12 @@ const Login = () => {
                   </Typography>
                 )}
               </div>
-              <Button label="Login" type="submit" />
+              <div className="mb-4"></div>
+              <Button label="Login" type="submit" className="w-full h-12 flex items-center justify-center " />
             </form>
           </CardBody>
           <CardFooter className="pt-0">
-            <Button label="Sign In with Google" onClick={signInWithGoogle} />
+            <Button label="Sign In with Google" onClick={signInWithGoogle} className="w-full h-12 flex items-center justify-center" />
             <Link to="/reset">
               <p className="ml-1 font-bold font-roboto text-sm text-blue-500 text-center">
                 Reset the password
