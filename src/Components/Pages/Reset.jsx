@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Input, Typography } from "@material-tailwind/react";
 import Button from "./Button"; // Assuming Button is a custom component in your project
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
 
 const Reset = () => {
   const [email, setEmail] = useState("");
@@ -49,10 +50,10 @@ const Reset = () => {
           </div>
           <div className="pt-0 text-center">
             <span className="text-gray-700">Remember your password?</span>
-            {/* Import Link if you want to use it */}
-            {/* <Link to="/login" className="text-blue-500 hover:text-blue-700 transition-colors"> */}
+            {/* Use Link to navigate to the login page */}
+            <Link to="/login" className="text-blue-500 hover:text-blue-700 transition-colors">
               Login
-            {/* </Link> */}
+            </Link>
           </div>
         </div>
       )}
