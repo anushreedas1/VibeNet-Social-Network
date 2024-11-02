@@ -6,7 +6,7 @@ import {
   CardFooter,
   Typography,
 } from "@material-tailwind/react";
-import { Input, Button } from "@material-tailwind/react";
+import { Input } from "@material-tailwind/react";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -15,6 +15,7 @@ import { AuthContext } from "../AppContext/AppContext";
 import { auth, onAuthStateChanged } from "../firebase/firebase";
 import NET from 'vanta/dist/vanta.net.min';
 import * as THREE from 'three';
+import Button from "./Button"; // Adjust the import path as necessary
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -40,16 +41,16 @@ const Login = () => {
         maxDistance: 30.00,
         spacing: 20.00,
         showDots: false
-      }))
+      }));
     }
     return () => {
-      if (vantaEffect) vantaEffect.destroy()
-    }
+      if (vantaEffect) vantaEffect.destroy();
+    };
   }, [vantaEffect]);
 
   useEffect(() => {
     setLoading(true);
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         navigate("/");
         setLoading(false);
@@ -57,6 +58,7 @@ const Login = () => {
         setLoading(false);
       }
     });
+    return () => unsubscribe(); // Cleanup subscription
   }, [navigate]);
 
   const initialValues = {
@@ -75,7 +77,7 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const { email, password } = formik.values;
-    if (formik.isValid === true) {
+    if (formik.isValid) {
       loginWithEmailAndPassword(email, password);
       setLoading(true);
     } else {
@@ -93,15 +95,16 @@ const Login = () => {
           <ClipLoader color="#ffffff" size={150} speedMultiplier={0.5} />
         </div>
       ) : (
-        <Card className="w-96 bg-white/90 backdrop-filter backdrop-blur-sm"> 
+        <Card className="w-96 bg-white/90 backdrop-filter backdrop-blur-sm">
           <CardHeader
             variant="gradient"
-            className="mb-4 grid h-28 place-items-center bg-gradient-to-r from-purple-700 to-blue-500"
+            className="mb-4 grid h-28 place-items-center bg-[#008000]"
           >
             <Typography variant="h3" color="white">
               LOGIN
             </Typography>
           </CardHeader>
+
           <CardBody className="flex flex-col gap-4">
             <form onSubmit={formik.handleSubmit}>
               <div className="mb-2">
@@ -132,25 +135,11 @@ const Login = () => {
                   </Typography>
                 )}
               </div>
-              <Button
-                variant="gradient"
-                fullWidth
-                className="mt-6"
-                type="submit"
-              >
-                Login
-              </Button>
+              <Button label="Login" type="submit" />
             </form>
           </CardBody>
           <CardFooter className="pt-0">
-            <Button
-              variant="gradient"
-              fullWidth
-              className="mb-4"
-              onClick={signInWithGoogle}
-            >
-              Sign In with Google
-            </Button>
+            <Button label="Sign In with Google" onClick={signInWithGoogle} />
             <Link to="/reset">
               <p className="ml-1 font-bold font-roboto text-sm text-blue-500 text-center">
                 Reset the password
@@ -167,9 +156,7 @@ const Login = () => {
             {/* Customer Support Button */}
             <div className="mt-4 flex justify-start w-full">
               <Link to="/customer-support" className="text-blue-500 hover:text-blue-700 transition-colors">
-                <Button variant="outlined" className="text-blue-500 border-blue-500">
-                  Customer Support
-                </Button>
+                <Button label="Customer Support" />
               </Link>
             </div>
           </CardFooter>
@@ -177,6 +164,6 @@ const Login = () => {
       )}
     </div>
   );
-};
+}
 
 export default Login;
