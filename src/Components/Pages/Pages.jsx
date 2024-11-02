@@ -5,7 +5,7 @@ import Register from "./Regsiter"; // Correct spelling
 import Reset from "./Reset";
 import Home from "./Home";
 import FriendProfile from "./FriendProfile";
-import Support from "./Support"; // Adjust the path correctly
+import Support from "./Support.tsx"; // Adjust the path correctly
 
 const Pages = () => {
   return (
