@@ -41,12 +41,12 @@ const Register = () => {
   const validationSchema = Yup.object({
     name: Yup.string()
       .required("Required")
-      .min("4", "Must be at least 4 characters long")
+      .min(4, "Must be at least 4 characters long")
       .matches(/^[a-zA-Z]+$/, "Name can only contain letters"),
     email: Yup.string().email("Invalid email address").required("Required"),
     password: Yup.string()
       .required("Required")
-      .min("6", "Must be at least 6 characters long")
+      .min(6, "Must be at least 6 characters long")
       .matches(/^[a-zA-Z]+$/, "Password can only contain letters"),
   });
 
@@ -62,8 +62,11 @@ const Register = () => {
     }
   };
 
-  const formik = useFormik({ initialValues, validationSchema, handleRegister });
-
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit: handleRegister,
+  });
 
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -72,10 +75,10 @@ const Register = () => {
           <ClipLoader color="#ffffff" size={150} speedMultiplier={0.5} />
         </div>
       ) : (
-        <Card className="w-96 bg-white/90 backdrop-filter backdrop-blur-sm">
+        <Card className="w-96 bg-white/90 backdrop-filter backdrop-blur-sm rounded-lg">
           <CardHeader
             variant="gradient"
-            className="mb-4 grid h-28 place-items-center bg-[#008000]"
+            className="mb-4 grid h-28 place-items-center bg-[#008000] rounded-t-lg"
           >
             <Typography variant="h3" color="white">
               REGISTER
@@ -91,9 +94,15 @@ const Register = () => {
                   label="Name"
                   size="lg"
                   {...formik.getFieldProps("name")}
+                  onFocus={() => formik.setFieldTouched("name", true)}
+                  onBlur={() => formik.setFieldTouched("name", formik.values.name !== '')}
                 />
                 {formik.touched.name && formik.errors.name && (
-                  <Typography variant="small" color="red">
+                  <Typography
+                    variant="small"
+                    color="red"
+                    className="transition-opacity duration-300 ease-in-out opacity-100"
+                  >
                     {formik.errors.name}
                   </Typography>
                 )}
@@ -105,11 +114,15 @@ const Register = () => {
                   label="Email"
                   size="lg"
                   {...formik.getFieldProps("email")}
+                  onFocus={() => formik.setFieldTouched("email", true)}
+                  onBlur={() => formik.setFieldTouched("email", formik.values.email !== '')}
                 />
-              </div>
-              <div>
                 {formik.touched.email && formik.errors.email && (
-                  <Typography variant="small" color="red">
+                  <Typography
+                    variant="small"
+                    color="red"
+                    className="transition-opacity duration-300 ease-in-out opacity-100"
+                  >
                     {formik.errors.email}
                   </Typography>
                 )}
@@ -121,18 +134,24 @@ const Register = () => {
                   label="Password"
                   size="lg"
                   {...formik.getFieldProps("password")}
+                  onFocus={() => formik.setFieldTouched("password", true)}
+                  onBlur={() => formik.setFieldTouched("password", formik.values.password !== '')}
                 />
                 {formik.touched.password && formik.errors.password && (
-                  <Typography variant="small" color="red">
+                  <Typography
+                    variant="small"
+                    color="red"
+                    className="transition-opacity duration-300 ease-in-out opacity-100"
+                  >
                     {formik.errors.password}
                   </Typography>
                 )}
               </div>
-              <div className="mb-4"></div> 
-              <Button label="Register" type="submit" className="w-full h-12 flex items-center justify-center" />
+              <div className="mb-4"></div>
+              <Button label="Register" type="submit" className="w-full h-12 flex items-center justify-center rounded-lg" />
             </form>
           </CardBody>
-          <CardFooter className="pt-0">
+          <CardFooter className="pt-0 rounded-b-lg">
             <div className="mt-6 flex items-center font-roboto text-base justify-center">
               Already have an account?
               <Link to="/login">

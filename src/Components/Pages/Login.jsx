@@ -15,7 +15,7 @@ import { AuthContext } from "../AppContext/AppContext";
 import { auth, onAuthStateChanged } from "../firebase/firebase";
 import NET from 'vanta/dist/vanta.net.min';
 import * as THREE from 'three';
-import Button from "./Button"; // Adjust the import path as necessary
+import Button from "./Button"; // Adjust the import path if necessary
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -60,33 +60,29 @@ const Login = () => {
     });
   }, [navigate]);
 
-  let initialValues = {
-    email: "",
-    password: "",
-  };
-
-  const validationSchema = Yup.object({
-    email: Yup.string().email("Invalid email address").required("Required"),
-    password: Yup.string()
-      .required("Required")
-      .min(6, "Must be at least 6 characters long")
-      .matches(/^[a-zA-Z]+$/, "Password can only contain letters"),
-  });
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const { email, password } = formik.values;
-    if (formik.isValid === true) {
-      loginWithEmailAndPassword(email, password);
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: Yup.object({
+      email: Yup.string().email("Invalid email address").required("Required"),
+      password: Yup.string()
+        .required("Required")
+        .min(6, "Must be at least 6 characters long")
+        .matches(/^[a-zA-Z]+$/, "Password can only contain letters"),
+    }),
+    onSubmit: async (values) => {
       setLoading(true);
-    } else {
-      setLoading(false);
-      alert("Check your input fields");
-    }
-    console.log("formik", formik);
-  };
-
-  const formik = useFormik({ initialValues, validationSchema, handleSubmit });
+      try {
+        await loginWithEmailAndPassword(values.email, values.password);
+        navigate("/"); // Redirect on successful login
+      } catch (error) {
+        setLoading(false);
+        alert("Login failed. Please check your credentials.");
+      }
+    },
+  });
 
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -114,9 +110,11 @@ const Login = () => {
                   label="Email"
                   size="lg"
                   {...formik.getFieldProps("email")}
+                  onFocus={() => formik.setFieldTouched("email", true)}
+                  onBlur={() => formik.setFieldTouched("email", formik.values.email !== '')}
                 />
                 {formik.touched.email && formik.errors.email && (
-                  <Typography variant="small" color="red">
+                  <Typography variant="small" color="red" className="animate-pulse">
                     {formik.errors.email}
                   </Typography>
                 )}
@@ -128,19 +126,31 @@ const Login = () => {
                   label="Password"
                   size="lg"
                   {...formik.getFieldProps("password")}
+                  onFocus={() => formik.setFieldTouched("password", true)}
+                  onBlur={() => formik.setFieldTouched("password", formik.values.password !== '')}
                 />
                 {formik.touched.password && formik.errors.password && (
-                  <Typography variant="small" color="red">
+                  <Typography variant="small" color="red" className="animate-pulse">
                     {formik.errors.password}
                   </Typography>
                 )}
               </div>
-              <div className="mb-4"></div>
-              <Button label="Login" type="submit" className="w-full h-12 flex items-center justify-center " />
+              <div className="my-5"></div> 
+
+
+              <Button
+                label="Login"
+                type="submit"
+                className="w-full h-12 flex items-center justify-center"
+              />
             </form>
           </CardBody>
           <CardFooter className="pt-0">
-            <Button label="Sign In with Google" onClick={signInWithGoogle} className="w-full h-12 flex items-center justify-center" />
+            <Button
+              label="Sign In with Google"
+              onClick={signInWithGoogle}
+              className="w-full h-12 flex items-center justify-center"
+            />
             <Link to="/reset">
               <p className="ml-1 font-bold font-roboto text-sm text-blue-500 text-center">
                 Reset the password
@@ -154,7 +164,6 @@ const Login = () => {
                 </p>
               </Link>
             </div>
-            {/* Customer Support Button */}
             <div className="mt-4 flex justify-start w-full">
               <Link to="/customer-support" className="text-blue-500 hover:text-blue-700 transition-colors">
                 <Button label="Customer Support" />
@@ -165,6 +174,6 @@ const Login = () => {
       )}
     </div>
   );
-}
+};
 
 export default Login;
