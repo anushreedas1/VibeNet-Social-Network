@@ -1,0 +1,35 @@
+/* Footer styles */
+.bg-dark-blue {
+  background-color: #1a1b2e;
+}
+
+.text-light-gray {
+  color: #a5b4cb;
+}
+
+.text-white {
+  color: #ffffff;
+}
+
+.container {
+  max-width: 1200px;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.flex {
+  display: flex;
+}
+
+.space-x-6 {
+  gap: 1.5rem; /* Increase space between icons for a cleaner look */
+}
+
+/* Desktop grid layout */
+@media (min-width: 1024px) {
+  .lg\:grid-cols-5 {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
