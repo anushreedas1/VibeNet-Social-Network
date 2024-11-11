@@ -8,14 +8,7 @@ import {
   signOut,
 } from "firebase/auth";
 import { auth, db, onAuthStateChanged } from "../firebase/firebase";
-import {
-  query,
-  where,
-  collection,
-  getDocs,
-  addDoc,
-  onSnapshot,
-} from "firebase/firestore";
+import { query, where, collection, getDocs, addDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext();
@@ -23,9 +16,8 @@ export const AuthContext = createContext();
 const AppContext = ({ children }) => {
   const collectionUsersRef = collection(db, "users");
   const provider = new GoogleAuthProvider();
-  const [user, setUser] = useState();
-  const [userData, setUserData] = useState();
-
+  const [user, setUser] = useState(null);
+  const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
 
   const signInWithGoogle = async () => {
@@ -77,7 +69,7 @@ const AppContext = ({ children }) => {
   const sendPasswordToUser = async (email) => {
     try {
       await sendPasswordResetEmail(auth, email);
-      alert("New password send to your email");
+      alert("New password sent to your email");
     } catch (err) {
       alert(err.message);
       console.log(err.message);
@@ -86,49 +78,49 @@ const AppContext = ({ children }) => {
 
   const signOutUser = async () => {
     await signOut(auth);
-  };
-
-  const userStateChanged = async () => {
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const q = query(collectionUsersRef, where("uid", "==", user?.uid));
-        await onSnapshot(q, (doc) => {
-          setUserData(doc?.docs[0]?.data());
-        });
-        setUser(user);
-      } else {
-        setUser(null);
-        navigate("/login");
-      }
-    });
+    setUser(null);
+    setUserData(null);
   };
 
   useEffect(() => {
-    userStateChanged();
-    if (user || userData) {
-      navigate("/");
-    } else {
-      navigate("/login");
-    }
-    return () => userStateChanged();
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        const q = query(collectionUsersRef, where("uid", "==", currentUser.uid));
+        const snapshot = await getDocs(q);
+        setUser(currentUser);
+        setUserData(snapshot.docs[0]?.data());
+      } else {
+        setUser(null);
+        setUserData(null);
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
+  // Handle navigation after auth state is established
+  useEffect(() => {
+    if (user === null) {
+      navigate("/"); // Navigate to the landing page if no user is authenticated
+    } else {
+      navigate("/home"); // Navigate to home if user is logged in
+    }
+  }, [user, navigate]);
+
   const initialState = {
-    signInWithGoogle: signInWithGoogle,
-    loginWithEmailAndPassword: loginWithEmailAndPassword,
-    registerWithEmailAndPassword: registerWithEmailAndPassword,
-    sendPasswordToUser: sendPasswordToUser,
-    signOutUser: signOutUser,
-    user: user,
-    userData: userData,
+    signInWithGoogle,
+    loginWithEmailAndPassword,
+    registerWithEmailAndPassword,
+    sendPasswordToUser,
+    signOutUser,
+    user,
+    userData,
   };
 
   return (
-    <div>
-      <AuthContext.Provider value={initialState}>
-        {children}
-      </AuthContext.Provider>
-    </div>
+    <AuthContext.Provider value={initialState}>
+      {children} {/* Always render children (landing page, home page, etc.) */}
+    </AuthContext.Provider>
   );
 };
 

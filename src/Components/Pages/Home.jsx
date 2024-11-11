@@ -1,5 +1,4 @@
 import React from "react";
-import LeftSide from "../LeftSidebar/LeftSide";
 import CardSection from "../Main/CardSection";
 import Navbar from "../Navbar/Navbar";
 import RightSide from "../RightSidebar/RightSide";
@@ -13,11 +12,8 @@ const Home = () => {
         <Navbar />
       </div>
       <div className="flex flex-grow bg-gray-100 pt-16"> {/* Added pt-16 for navbar space */}
-        <div className="flex-auto w-[20%] fixed top-16">
-          <LeftSide />
-        </div>
-        <div className="flex-auto w-[60%] absolute left-[20%] top-16 bg-gray-100 rounded-xl">
-          <div className="w-[80%] mx-auto">
+        <div className="flex-auto w-[60%] absolute left-[5%] top-16 bg-gray-100 rounded-xl">
+          <div className="w-[100%] mx-auto">
             <CardSection />
             <Main />
           </div>
@@ -26,9 +22,10 @@ const Home = () => {
           <RightSide />
         </div>
       </div>
-
-      {/* Footer at the bottom of the page */}
-      <Footer />
+      {/* Footer positioned at the bottom */}
+      <div className="absolute bottom-0 w-full">
+        <Footer />
+      </div>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import Logo from "../assets/Svgs/star_white_48dp.svg";
+import Logo from "../../assets/Svgs/star_white_48dp.svg";
 import { motion } from "framer-motion";
 import { useLocomotiveScroll } from "react-locomotive-scroll";
 
@@ -110,7 +110,7 @@ const Bottom = styled.div`
   }
 `;
 
-const Footer = () => {
+const Foote = () => {
   const { scroll } = useLocomotiveScroll();
 
   const handleScroll = (id) => {
@@ -126,9 +126,9 @@ const Footer = () => {
   return (
     <Section>
       <LogoContainer>
-        <img data-scroll data-scroll-speed="2" src={Logo} alt="Wibe Studio" />
+        <img data-scroll data-scroll-speed="2" src={Logo} alt="VibeNet" />
         <h3 data-scroll data-scroll-speed="-1">
-          Wibe Studio
+          VibeNet
         </h3>
       </LogoContainer>
       <FooterComponent
@@ -142,8 +142,6 @@ const Footer = () => {
         <ul>
           <li onClick={() => handleScroll("#home")}>home</li>
           <li onClick={() => handleScroll(".about")}>about</li>
-          <li onClick={() => handleScroll("#shop")}>shop</li>
-          <li onClick={() => handleScroll("#new-arrival")}>new arrival</li>
           <li>
             <a href="https://google.com" target="_blank" rel="noreferrer">
               look book
@@ -183,4 +181,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default Foote;

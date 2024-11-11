@@ -1,9 +1,10 @@
 import React from "react";
 import { FaFacebook, FaInstagram, FaTwitter, FaGithub, FaYoutube } from "react-icons/fa";
+import './Footer.css'; // Ensure this CSS file exists and is correctly linked
 
 const Footer = () => {
   return (
-    <footer className="bg-dark-blue text-light-gray py-10 px-5">
+    <footer className="bg-blue-900 text-gray-400 py-10 px-5">
       <div className="container mx-auto grid grid-cols-1 lg:grid-cols-5 gap-10">
         
         {/* Left section with logo, description, and social icons */}
@@ -11,7 +12,7 @@ const Footer = () => {
           <div className="text-blue-400 text-3xl font-semibold">
             <span className="logo-icon">🌊</span> {/* Replace with your logo */}
           </div>
-          <p className="text-light-gray">
+          <p className="text-gray-300">
             Making the world a better place through constructing elegant hierarchies.
           </p>
           <div className="flex space-x-6 text-3xl">
@@ -68,7 +69,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom copyright section */}
-      <div className="text-center text-light-gray mt-10 border-t border-gray-700 pt-5">
+      <div className="text-center text-gray-400 mt-10 border-t border-gray-700 pt-5">
         © 2024 Your Company, Inc. All rights reserved.
       </div>
     </footer>

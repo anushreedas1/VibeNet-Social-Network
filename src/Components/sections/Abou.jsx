@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-import img1 from "../assets/Images/1.webp";
-import img2 from "../assets/Images/2.webp";
-import img3 from "../assets/Images/3.webp";
+import img1 from "../../assets/images/1.webp";
+import img2 from "../../assets/images/2.webp";
+import img3 from "../../assets/images/3.webp";
 
 const Section = styled.section`
   position: relative;
@@ -116,7 +116,7 @@ const Right = styled.div`
   }
 `;
 
-const About = () => {
+const Abou = () => {
   return (
     <Section id="fixed-target" className="about">
       <Title
@@ -127,21 +127,15 @@ const About = () => {
         About Us
       </Title>
       <Left data-scroll data-scroll-sticky data-scroll-target="#fixed-target">
-        We're fashion studio based in california. We create unique designs that
-        will blow your mind. We also design unique jewellary pieces. Fashion is
-        an ART that can not be grasped by everyone.
-        <br />
-        <br />
-        We are very dedicated to making our products. We offer unique and
-        creative products to a wide range of people. We have a variety of
-        styles, but for most people, all of the options are in the box. We
-        specialize in making things that make you happy.
-        <br />
-        <br />
-        We strive to build on our vision. As a fashion label, we do our best to
-        create amazing experiences for all people. We are always looking to make
-        something that is easy for everyone.
-      </Left>
+  VibeNet is a dynamic social networking platform where people connect, share, and engage with each other. Whether you’re looking to meet new friends, share your passions, or stay updated with what’s happening around the world, VibeNet is the place to be.
+  <br />
+  <br />
+  Our mission is to create a space where individuals can express themselves freely, discover new communities, and connect over shared interests. With personalized profiles, instant messaging, and interactive features, VibeNet makes online connection seamless and fun.
+  <br />
+  <br />
+  We’re constantly innovating to make socializing easier and more enjoyable. Join VibeNet today and be part of a vibrant community where you can create lasting connections.
+</Left>
+
       <Right>
         <img src={img1} alt="About Us" />
         <img
@@ -163,4 +157,4 @@ const About = () => {
   );
 };
 
-export default About;
+export default Abou;
