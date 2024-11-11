@@ -1,9 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import img1 from "../../assets/images/1.webp";
-import img2 from "../../assets/images/2.webp";
-import img3 from "../../assets/images/3.webp";
+
 
 const Section = styled.section`
   position: relative;
@@ -136,23 +134,7 @@ const Abou = () => {
   We’re constantly innovating to make socializing easier and more enjoyable. Join VibeNet today and be part of a vibrant community where you can create lasting connections.
 </Left>
 
-      <Right>
-        <img src={img1} alt="About Us" />
-        <img
-          data-scroll
-          data-scroll-speed="5"
-          src={img2}
-          className="small-img-1"
-          alt="About Us"
-        />
-        <img
-          data-scroll
-          data-scroll-speed="-2"
-          src={img3}
-          alt="About Us"
-          className="small-img-2"
-        />
-      </Right>
+      
     </Section>
   );
 };
