@@ -16,43 +16,48 @@ function Land() {
   const containerRef = useRef(null);
   const [loaded, setLoaded] = useState(false);
 
-  // Add a delay before setting `loaded` to true
   useEffect(() => {
+    // Add a delay before setting `loaded` to true
     const loadTimer = setTimeout(() => {
       setLoaded(true);
     }, 3000);
-    
-    return () => clearTimeout(loadTimer); // Clear timeout on unmount
+
+    return () => clearTimeout(loadTimer); // Clean up timer on unmount
   }, []);
+
+  // Debugging: Check if `loaded` state changes correctly
+  useEffect(() => {
+    console.log("Loaded state: ", loaded); // Check when loaded state changes
+  }, [loaded]);
 
   return (
     <>
       <GlobalStyles />
-
       <ThemeProvider theme={dark}>
-        <AnimatePresence>{loaded ? null : <Loader />}</AnimatePresence>
-
-        {/* Render LocomotiveScrollProvider only when loaded */}
-        {loaded && (
-          <LocomotiveScrollProvider
-            options={{
-              smooth: true,
-              smartphone: { smooth: true },
-              tablet: { smooth: true },
-            }}
-            watch={[]}
-            containerRef={containerRef}
-          >
-            <ScrollTriggerProxy />
-            <AnimatePresence>
+        <AnimatePresence>
+          {loaded ? (
+            // Render LocomotiveScrollProvider only after loading is complete
+            <LocomotiveScrollProvider
+              options={{
+                smooth: true,
+                smartphone: { smooth: true },
+                tablet: { smooth: true },
+              }}
+              watch={[]}
+              containerRef={containerRef}
+            >
+              <ScrollTriggerProxy />
               <main className="App" data-scroll-container ref={containerRef}>
                 <Lan />
                 <Abou />
                 <Foote />
               </main>
-            </AnimatePresence>
-          </LocomotiveScrollProvider>
-        )}
+            </LocomotiveScrollProvider>
+          ) : (
+            // Show loader while `loaded` is false
+            <Loader />
+          )}
+        </AnimatePresence>
       </ThemeProvider>
     </>
   );

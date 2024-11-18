@@ -18,6 +18,7 @@ const AppContext = ({ children }) => {
   const provider = new GoogleAuthProvider();
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true); // To track auth state loading
   const navigate = useNavigate();
 
   const signInWithGoogle = async () => {
@@ -93,6 +94,7 @@ const AppContext = ({ children }) => {
         setUser(null);
         setUserData(null);
       }
+      setLoading(false); // Authentication state is now resolved
     });
 
     return () => unsubscribe();
@@ -100,12 +102,14 @@ const AppContext = ({ children }) => {
 
   // Handle navigation after auth state is established
   useEffect(() => {
-    if (user === null) {
-      navigate("/"); // Navigate to the landing page if no user is authenticated
-    } else {
-      navigate("/home"); // Navigate to home if user is logged in
+    if (!loading) { // Only navigate after loading is complete
+      if (user === null) {
+        navigate("/"); // Navigate to the landing page if no user is authenticated
+      } else {
+        navigate("/home"); // Navigate to home if user is logged in
+      }
     }
-  }, [user, navigate]);
+  }, [user, loading, navigate]);
 
   const initialState = {
     signInWithGoogle,
@@ -119,7 +123,7 @@ const AppContext = ({ children }) => {
 
   return (
     <AuthContext.Provider value={initialState}>
-      {children} {/* Always render children (landing page, home page, etc.) */}
+      {loading ? <div>Loading...</div> : children} {/* Show loading while checking auth */}
     </AuthContext.Provider>
   );
 };

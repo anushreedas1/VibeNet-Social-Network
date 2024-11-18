@@ -2,29 +2,55 @@ import React, { useContext } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Land from "./Land";
 import Login from "./Login";
-import Register from "./Regsiter";
+import Register from "./Regsiter"; 
 import Reset from "./Reset";
 import Home from "./Home";
 import FriendProfile from "./FriendProfile";
 import Support from "./Support";
 import { AuthContext } from "../AppContext/AppContext";
+import Background from "../Background/Background";
 
 const Pages = () => {
   const { user } = useContext(AuthContext);
 
   return (
     <Routes>
-      {/* Land as the default page */}
+      {/* Landing page */}
       <Route path="/" element={<Land />} />
 
-      {/* Only show the home page if the user is authenticated */}
-      <Route path="/home" element={user ? <Home /> : <Navigate to="/login" replace />} />
+      {/* Home page */}
+      <Route path="/home" element={user ? <Home /> : <Navigate to="/login" />} />
 
-      {/* Other pages */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/reset" element={<Reset />} />
+      {/* Login, Register, and Reset pages with Background wrapper */}
+      <Route
+        path="/login"
+        element={
+          <Background>
+            <Login />
+          </Background>
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          <Background>
+            <Register />
+          </Background>
+        }
+      />
+      <Route
+        path="/reset"
+        element={
+          <Background>
+            <Reset />
+          </Background>
+        }
+      />
+
+      {/* Profile page */}
       <Route path="/profile/:id" element={<FriendProfile />} />
+
+      {/* Customer support page */}
       <Route path="/customer-support" element={<Support />} />
     </Routes>
   );

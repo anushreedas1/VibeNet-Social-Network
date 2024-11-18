@@ -1,23 +1,22 @@
 import React from "react";
 import styled from "styled-components";
 
-
-
 const Section = styled.section`
   position: relative;
   min-height: 100vh;
-  width: 80vw;
+  width: 100vw;
   display: flex;
-
   margin: 0 auto;
+  background-color: white; /* Default white background */
 
   @media (max-width: 48em) {
-    width: 90vw;
+    width: 100vw;
   }
   @media (max-width: 30em) {
     width: 100vw;
   }
 `;
+
 const Title = styled.h1`
   font-size: ${(props) => props.theme.fontBig};
   font-family: "Kaushan Script";
@@ -37,6 +36,7 @@ const Title = styled.h1`
     font-size: ${(props) => props.theme.fontxxxl};
   }
 `;
+
 const Left = styled.div`
   width: 50%;
   font-size: ${(props) => props.theme.fontlg};
@@ -44,6 +44,7 @@ const Left = styled.div`
   position: relative;
   z-index: 5;
   margin-top: 20%;
+  margin-left: 20%; /* Shift content to the right by 20% of the container width */
 
   @media (max-width: 64em) {
     width: 80%;
@@ -69,6 +70,7 @@ const Left = styled.div`
     width: 70%;
   }
 `;
+
 const Right = styled.div`
   width: 50%;
   position: relative;
@@ -125,16 +127,14 @@ const Abou = () => {
         About Us
       </Title>
       <Left data-scroll data-scroll-sticky data-scroll-target="#fixed-target">
-  VibeNet is a dynamic social networking platform where people connect, share, and engage with each other. Whether you’re looking to meet new friends, share your passions, or stay updated with what’s happening around the world, VibeNet is the place to be.
-  <br />
-  <br />
-  Our mission is to create a space where individuals can express themselves freely, discover new communities, and connect over shared interests. With personalized profiles, instant messaging, and interactive features, VibeNet makes online connection seamless and fun.
-  <br />
-  <br />
-  We’re constantly innovating to make socializing easier and more enjoyable. Join VibeNet today and be part of a vibrant community where you can create lasting connections.
-</Left>
-
-      
+        VibeNet is a dynamic social networking platform where people connect, share, and engage with each other. Whether you’re looking to meet new friends, share your passions, or stay updated with what’s happening around the world, VibeNet is the place to be.
+        <br />
+        <br />
+        Our mission is to create a space where individuals can express themselves freely, discover new communities, and connect over shared interests. With personalized profiles, instant messaging, and interactive features, VibeNet makes online connection seamless and fun.
+        <br />
+        <br />
+        We’re constantly innovating to make socializing easier and more enjoyable. Join VibeNet today and be part of a vibrant community where you can create lasting connections.
+      </Left>
     </Section>
   );
 };
