@@ -3,7 +3,6 @@ import GlobalStyles from "../styles/GlobalStyles";
 import { dark } from "../styles/Themes";
 import { LocomotiveScrollProvider } from "react-locomotive-scroll";
 import { useEffect, useRef, useState } from "react";
-import 'locomotive-scroll/dist/locomotive-scroll.css';
 
 import Lan from "../sections/Lan";
 import { AnimatePresence } from "framer-motion";
