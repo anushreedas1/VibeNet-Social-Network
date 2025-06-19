@@ -1,6 +1,4 @@
 import { createGlobalStyle } from "styled-components";
-import "@fontsource/kaushan-script";
-import "@fontsource/sirin-stencil";
 
 const GlobalStyles = createGlobalStyle`
 
@@ -11,7 +9,7 @@ const GlobalStyles = createGlobalStyle`
 
   body {
     background-color: white; /* Default background color */
-    font-family: "Sirin Stencil", sans-serif; /* Apply the Sirin Stencil font */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; /* Apply the system fonts */
     overflow-x: hidden; /* Prevent horizontal scrolling */
     transition: background-color 0.3s ease; /* Smooth transition */
   }

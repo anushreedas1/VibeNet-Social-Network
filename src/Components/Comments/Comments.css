@@ -1,0 +1,26 @@
+.comment-container {
+  padding: 15px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.comment-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.comment-user {
+  font-weight: 500;
+}
+
+.comment-content {
+  margin-left: 42px;
+  color: var(--text-color);
+}

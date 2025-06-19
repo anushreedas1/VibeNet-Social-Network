@@ -1,12 +1,4 @@
 import React, { useState, useContext, useEffect } from "react";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Typography,
-} from "@material-tailwind/react";
-import { Input } from "@material-tailwind/react";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -16,6 +8,8 @@ import { auth, onAuthStateChanged } from "../firebase/firebase";
 import NET from 'vanta/dist/vanta.net.min';
 import * as THREE from 'three';
 import Button from "./Button"; // Adjust the import path if necessary
+import './Auth.css';
+import './Pages.css';
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -85,92 +79,63 @@ const Login = () => {
   });
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="login-page flex items-center justify-center min-h-screen">
       {loading ? (
         <div className="grid grid-cols-1 justify-items-center items-center">
           <ClipLoader color="#ffffff" size={150} speedMultiplier={0.5} />
         </div>
       ) : (
-        <Card className="w-96 bg-white/90 backdrop-filter backdrop-blur-sm">
-          <CardHeader
-            variant="gradient"
-            className="mb-4 grid h-28 place-items-center bg-[#008000]"
-          >
-            <Typography variant="h3" color="white">
-              LOGIN
-            </Typography>
-          </CardHeader>
-
-          <CardBody className="flex flex-col gap-4">
-            <form onSubmit={formik.handleSubmit}>
-              <div className="mb-2">
-                <Input
-                  name="email"
-                  type="email"
-                  label="Email"
-                  size="lg"
-                  {...formik.getFieldProps("email")}
-                  onFocus={() => formik.setFieldTouched("email", true)}
-                  onBlur={() => formik.setFieldTouched("email", formik.values.email !== '')}
-                />
-                {formik.touched.email && formik.errors.email && (
-                  <Typography variant="small" color="red" className="animate-pulse">
-                    {formik.errors.email}
-                  </Typography>
-                )}
-              </div>
-              <div className="mt-4 mb-2">
-                <Input
-                  name="password"
-                  type="password"
-                  label="Password"
-                  size="lg"
-                  {...formik.getFieldProps("password")}
-                  onFocus={() => formik.setFieldTouched("password", true)}
-                  onBlur={() => formik.setFieldTouched("password", formik.values.password !== '')}
-                />
-                {formik.touched.password && formik.errors.password && (
-                  <Typography variant="small" color="red" className="animate-pulse">
-                    {formik.errors.password}
-                  </Typography>
-                )}
-              </div>
-              <div className="my-5"></div> 
-
-
-              <Button
-                label="Login"
-                type="submit"
-                className="w-full h-12 flex items-center justify-center"
+        <div className="auth-container">
+          <h1 className="auth-title">Sign In</h1>
+          <form className="auth-form" onSubmit={formik.handleSubmit}>
+            <div className="form-group">
+              <input
+                type="email"
+                className="form-input"
+                placeholder="Email"
+                required
+                name="email"
+                {...formik.getFieldProps("email")}
+                onFocus={() => formik.setFieldTouched("email", true)}
+                onBlur={() => formik.setFieldTouched("email", formik.values.email !== '')}
               />
-            </form>
-          </CardBody>
-          <CardFooter className="pt-0">
+              {formik.touched.email && formik.errors.email && (
+                <p className="error-message">
+                  {formik.errors.email}
+                </p>
+              )}
+            </div>
+            <div className="form-group">
+              <input
+                type="password"
+                className="form-input"
+                placeholder="Password"
+                required
+                name="password"
+                {...formik.getFieldProps("password")}
+                onFocus={() => formik.setFieldTouched("password", true)}
+                onBlur={() => formik.setFieldTouched("password", formik.values.password !== '')}
+              />
+              {formik.touched.password && formik.errors.password && (
+                <p className="error-message">
+                  {formik.errors.password}
+                </p>
+              )}
+            </div>
+            <div className="my-5"></div> 
+
+
             <Button
-              label="Sign In with Google"
-              onClick={signInWithGoogle}
+              label="Login"
+              type="submit"
               className="w-full h-12 flex items-center justify-center"
             />
-            <Link to="/reset">
-              <p className="ml-1 font-bold font-roboto text-sm text-blue-500 text-center">
-                Reset the password
-              </p>
-            </Link>
-            <div className="mt-6 flex items-center font-roboto text-base justify-center">
-              Don't have an account?
-              <Link to="/register">
-                <p className="ml-1 font-bold font-roboto text-sm text-blue-500 text-center">
-                  Register
-                </p>
-              </Link>
-            </div>
-            <div className="mt-4 flex justify-start w-full">
-              <Link to="/customer-support" className="text-blue-500 hover:text-blue-700 transition-colors">
-                <Button label="Customer Support" />
-              </Link>
-            </div>
-          </CardFooter>
-        </Card>
+          </form>
+          <div className="auth-links">
+            <Link to="/reset" className="auth-link">Forgot Password?</Link>
+            <Link to="/register" className="auth-link">Don't have an account? Sign Up</Link>
+          </div>
+        </div>
       )}
     </div>
   );

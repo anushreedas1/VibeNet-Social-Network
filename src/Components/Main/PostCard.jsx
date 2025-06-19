@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useReducer } from "react";
-import { Avatar } from "@material-tailwind/react";
+import "./PostCard.css";
 import avatar from "../../assets/images/avatar.jpg";
 import like from "../../assets/images/like.png";
 import comment from "../../assets/images/comment.png";
@@ -115,12 +115,11 @@ const PostCard = ({ uid, id, logo, name, email, text, image, timestamp }) => {
     <div className="mb-4">
       <div className="flex flex-col py-4 bg-white rounded-t-3xl">
         <div className="flex justify-start items-center pb-4 pl-4 ">
-          <Avatar
-            size="sm"
-            variant="circular"
+          <img
             src={logo || avatar}
             alt="avatar"
-          ></Avatar>
+            className="post-avatar"
+          ></img>
 
           <div className="flex flex-col ml-4">
             <p className=" py-2 font-roboto font-medium text-sm text-gray-700 no-underline tracking-normal leading-none">
@@ -187,3 +186,4 @@ const PostCard = ({ uid, id, logo, name, email, text, image, timestamp }) => {
 };
 
 export default PostCard;
+

@@ -2,9 +2,7 @@ import React, { useState, useContext } from "react";
 import waterslide from "../../assets/images/waterslide.jpg";
 import { AuthContext } from "../AppContext/AppContext";
 import { Link } from "react-router-dom";
-import { Avatar } from "@material-tailwind/react";
-import avatar from "../../assets/images/avatar.jpg";
-import remove from "../../assets/images/delete.png";
+import "./RightSide.css";
 import {
   collection,
   doc,
@@ -35,6 +33,11 @@ const RightSide = () => {
     await updateDoc(doc(db, "users", userDocumentId), {
       friends: arrayRemove({ id: id, name: name, image: image }),
     });
+  };
+
+  const handleRemove = (id) => {
+    console.log("Removing item:", id);
+    // Implement remove functionality
   };
 
   return (
@@ -69,11 +72,10 @@ const RightSide = () => {
               >
                 <Link to={`/profile/${friend.id}`}>
                   <div className="flex items-center cursor-pointer">
-                    <Avatar
-                      size="sm"
-                      variant="circular"
-                      src={friend?.image || avatar}
-                      alt="avatar"
+                    <img
+                      src={friend?.image || "/default-avatar.jpg"}
+                      alt="User avatar"
+                      className="suggestion-avatar"
                     />
                     <p className="ml-4 font-roboto font-medium text-sm text-white no-underline tracking-normal leading-none">
                       {friend.name}
@@ -99,8 +101,17 @@ const RightSide = () => {
           </p>
         )}
       </div>
+      <div className="suggestion-actions">
+        <button
+          className="remove-button"
+          onClick={() => handleRemove(1)}
+        >
+          Remove
+        </button>
+      </div>
     </div>
   );
 };
 
 export default RightSide;
+

@@ -1,0 +1,31 @@
+/* Base styles */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #fff;
+  color: #333;
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Example header styles */
+.header {
+  background-color: #f0f0f0;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Example button styles */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  background-color: #0078d7;
+  color: #fff;
+  border-radius: 4px;
+}
+
+/* ...additional custom styles... */

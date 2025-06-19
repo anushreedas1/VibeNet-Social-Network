@@ -1,17 +1,7 @@
-import React, {
-  useState,
-  useRef,
-  useContext,
-  useReducer,
-  useEffect,
-} from "react";
-import { Avatar } from "@material-tailwind/react";
-import avatar from "../../assets/images/avatar.jpg";
-import { Button } from "@material-tailwind/react";
-import live from "../../assets/images/live.png";
-import smile from "../../assets/images/smile.png";
-import addImage from "../../assets/images/add-image.png";
+import React, { useRef, useReducer, useState, useEffect, useContext } from "react";
+import "./Main.css";
 import { AuthContext } from "../AppContext/AppContext";
+import PostCard from "./PostCard";
 import {
   doc,
   setDoc,
@@ -33,21 +23,22 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-import { Alert } from "@material-tailwind/react";
-import PostCard from "./PostCard";
+import { FaImage, FaVideo, FaSmile } from "react-icons/fa";
 
 const Main = () => {
-  const { user, userData } = useContext(AuthContext);
-  const text = useRef("");
+  const { user, userData, collectionRef } = useContext(AuthContext);
+  const textRef = useRef("");
+  const fileRef = useRef(null);
   const scrollRef = useRef("");
+  const [text, setText] = useState("");
   const [image, setImage] = useState(null);
   const [file, setFile] = useState(null);
-  const collectionRef = collection(db, "posts");
   const postRef = doc(collection(db, "posts"));
   const document = postRef.id;
   const [state, dispatch] = useReducer(PostsReducer, postsStates);
   const { SUBMIT_POST, HANDLE_ERROR } = postActions;
   const [progressBar, setProgressBar] = useState(0);
+  const [notification, setNotification] = useState(null); // For custom notifications
 
   const handleUpload = (e) => {
     setFile(e.target.files[0]);
@@ -55,7 +46,7 @@ const Main = () => {
 
   const handleSubmitPost = async (e) => {
     e.preventDefault();
-    if (text.current.value !== "") {
+    if (text !== "") {
       try {
         await setDoc(postRef, {
           documentId: document,
@@ -63,18 +54,30 @@ const Main = () => {
           logo: user?.photoURL,
           name: user?.displayName || userData?.name,
           email: user?.email || userData?.email,
-          text: text.current.value,
+          text: text,
           image: image,
           timestamp: serverTimestamp(),
         });
-        text.current.value = "";
+        setText("");
+        // Show success notification
+        setNotification({
+          show: true,
+          message: "Post submitted successfully!",
+          type: "success",
+        });
+        setTimeout(() => setNotification(null), 3000); // Remove notification after 3 seconds
       } catch (err) {
         dispatch({ type: HANDLE_ERROR });
-        alert(err.message);
+        setNotification({ show: true, message: err.message, type: "error" });
         console.log(err.message);
       }
     } else {
       dispatch({ type: HANDLE_ERROR });
+      setNotification({
+        show: true,
+        message: "Please enter some text to post.",
+        type: "error",
+      });
     }
   };
 
@@ -122,7 +125,7 @@ const Main = () => {
         );
       } catch (err) {
         dispatch({ type: HANDLE_ERROR });
-        alert(err.message);
+        setNotification({ show: true, message: err.message, type: "error" });
         console.log(err.message);
       }
     }
@@ -142,87 +145,68 @@ const Main = () => {
         setProgressBar(0);
       });
     };
+    if (collectionRef) {
+      postData();
+    }
     return () => postData();
-  }, [SUBMIT_POST]);
+  }, [SUBMIT_POST, collectionRef]);
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="flex flex-col py-4 w-full bg-white rounded-3xl shadow-lg">
-        <div className="flex items-center border-b-2 border-gray-300 pb-4 pl-4 w-full">
-          <Avatar
-            size="sm"
-            variant="circular"
-            src={user?.photoURL || avatar}
-            alt="avatar"
-          ></Avatar>
-          <form className="w-full" onSubmit={handleSubmitPost}>
-            <div className="flex justify-between items-center">
-              <div className="w-full ml-4">
-                <input
-                  type="text"
-                  name="text"
-                  placeholder={`Whats on your mind ${
-                    user?.displayName?.split(" ")[0] ||
-                    userData?.name?.charAt(0).toUpperCase() +
-                      userData?.name?.slice(1)
-                  }`}
-                  className="outline-none w-full bg-white rounded-md"
-                  ref={text}
-                ></input>
-              </div>
-              <div className="mx-4">
-                {image && (
-                  <img
-                    className="h-24 rounded-xl"
-                    src={image}
-                    alt="previewImage"
-                  ></img>
-                )}
-              </div>
-              <div className="mr-4">
-                <Button variant="text" type="submit">
-                  Share
-                </Button>
-              </div>
-            </div>
-          </form>
+    <div className="main-container">
+      {notification && (
+        <div className={`notification ${notification.type}`}>
+          <span>{notification.message}</span>
+          <button onClick={() => setNotification(null)}>×</button>
         </div>
-        <span
-          style={{ width: `${progressBar}%` }}
-          className="bg-blue-700 py-1 rounded-md"
-        ></span>
-        <div className="flex justify-around items-center pt-4">
-          <div className="flex items-center">
-            <label
-              htmlFor="addImage"
-              className="cursor-pointer flex items-center"
-            >
-              <img className="h-10 mr-4" src={addImage} alt="addImage"></img>
-              <input
-                id="addImage"
-                type="file"
-                style={{ display: "none" }}
-                onChange={handleUpload}
-              ></input>
-            </label>
-            {file && (
-              <Button variant="text" onClick={submitImage}>
-                Upload
-              </Button>
-            )}
-          </div>
-          <div className="flex items-center">
-            <img className="h-10 mr-4" src={live} alt="live"></img>
-            <p className="font-roboto font-medium text-md text-gray-700 no-underline tracking-normal leading-none">
-              Live
-            </p>
-          </div>
-          <div className="flex items-center">
-            <img className="h-10 mr-4" src={smile} alt="feeling"></img>
-            <p className="font-roboto font-medium text-md text-gray-700 no-underline tracking-normal leading-none">
-              Feeling
-            </p>
-          </div>
+      )}
+      <div className="post-form">
+        <div className="user-profile">
+          <img
+            src={user?.photoURL || "/default-avatar.png"}
+            alt="user"
+            className="user-avatar"
+          />
+        </div>
+        <textarea
+          ref={textRef}
+          className="post-input"
+          placeholder="What's on your mind?"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+        />
+        <div className="post-actions">
+          <input
+            type="file"
+            hidden
+            ref={fileRef}
+            onChange={handleImageUpload}
+          />
+          <button
+            className="action-button"
+            onClick={() => fileRef.current.click()}
+          >
+            <FaImage /> Add Image
+          </button>
+          <button className="action-button">
+            <FaVideo /> Live Video
+          </button>
+          <button className="action-button">
+            <FaSmile /> Feeling/Activity
+          </button>
+          <button className="post-submit" onClick={handleSubmitPost}>
+            Post
+          </button>
         </div>
       </div>
       <div className="flex flex-col py-4 w-full">

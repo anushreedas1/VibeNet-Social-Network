@@ -4,11 +4,11 @@ import Navbar from "../Navbar/Navbar";
 import RightSide from "../RightSidebar/RightSide";
 import Main from "../Main/Main";
 import profilePic from "../../assets/images/profilePic.jpg";
-import { Avatar } from "@material-tailwind/react";
 import avatar from "../../assets/images/avatar.jpg";
 import { collection, where, query, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { useParams } from "react-router-dom";
+import "./Pages.css";
 
 const FriendProfile = () => {
   const { id } = useParams();
@@ -26,7 +26,7 @@ const FriendProfile = () => {
   console.log(profile);
 
   return (
-    <div className="w-full">
+    <div className="friend-profile w-full">
       <div className="fixed top-0 z-10 w-full bg-white">
         <Navbar></Navbar>
       </div>
@@ -44,12 +44,11 @@ const FriendProfile = () => {
                   alt="profilePic"
                 ></img>
                 <div className="absolute bottom-10 left-6">
-                  <Avatar
-                    size="xl"
-                    variant="circular"
+                  <img
                     src={profile?.image || avatar}
                     alt="avatar"
-                  ></Avatar>
+                    className="w-24 h-24 rounded-full"
+                  />
                   <p className="py-2 font-roboto font-medium text-sm text-white no-underline tracking-normal leading-none">
                     {profile?.email}
                   </p>

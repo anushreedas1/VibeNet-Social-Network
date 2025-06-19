@@ -1,0 +1,25 @@
+.comment {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.comment-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.comment-content {
+  margin-left: 42px;
+}
+
+.comment-text {
+  color: var(--text-color);
+}

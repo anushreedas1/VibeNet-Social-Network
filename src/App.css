@@ -24,3 +24,10 @@
   transform: translateY(-10px);
   transition: opacity 150ms linear, transform 150ms ease-in;
 }
+.app {
+  /* Add your styles here */
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Add more custom styles as needed */

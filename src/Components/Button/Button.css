@@ -1,0 +1,38 @@
+.custom-button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.button-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.button-secondary {
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+
+.button-small {
+  padding: 6px 12px;
+  font-size: 0.875rem;
+}
+
+.button-large {
+  padding: 12px 24px;
+  font-size: 1.125rem;
+}
+
+.button-rounded {
+  border-radius: 9999px;
+}
+
+.button-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
