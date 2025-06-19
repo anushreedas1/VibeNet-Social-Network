@@ -1,48 +1,29 @@
-import React, { useRef, useReducer, useState, useEffect, useContext } from "react";
-import "./Main.css";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../AppContext/AppContext";
+import "./Main.css";
 import PostCard from "./PostCard";
 import {
-  doc,
-  setDoc,
   collection,
-  serverTimestamp,
-  query,
-  orderBy,
+  doc,
   onSnapshot,
+  orderBy,
+  query,
+  serverTimestamp,
+  setDoc,
 } from "firebase/firestore";
 import { db } from "../firebase/firebase";
-import {
-  PostsReducer,
-  postActions,
-  postsStates,
-} from "../AppContext/PostReducer";
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from "firebase/storage";
-import { FaImage, FaVideo, FaSmile } from "react-icons/fa";
+import { PostsReducer, postActions, postsStates } from "../AppContext/PostReducer";
 
 const Main = () => {
   const { user, userData, collectionRef } = useContext(AuthContext);
-  const textRef = useRef("");
-  const fileRef = useRef(null);
-  const scrollRef = useRef("");
   const [text, setText] = useState("");
   const [image, setImage] = useState(null);
   const [file, setFile] = useState(null);
+  const [notification, setNotification] = useState(null); // For custom notifications
   const postRef = doc(collection(db, "posts"));
   const document = postRef.id;
-  const [state, dispatch] = useReducer(PostsReducer, postsStates);
+  const [state, dispatch] = React.useReducer(PostsReducer, postsStates);
   const { SUBMIT_POST, HANDLE_ERROR } = postActions;
-  const [progressBar, setProgressBar] = useState(0);
-  const [notification, setNotification] = useState(null); // For custom notifications
-
-  const handleUpload = (e) => {
-    setFile(e.target.files[0]);
-  };
 
   const handleSubmitPost = async (e) => {
     e.preventDefault();
@@ -81,56 +62,6 @@ const Main = () => {
     }
   };
 
-  const storage = getStorage();
-
-  const metadata = {
-    contentType: [
-      "image/jpeg",
-      "image/jpg",
-      "image/png",
-      "image/gif",
-      "image/svg+xml",
-    ],
-  };
-
-  const submitImage = async () => {
-    const fileType = metadata.contentType.includes(file["type"]);
-    if (!file) return;
-    if (fileType) {
-      try {
-        const storageRef = ref(storage, `images/${file.name}`);
-        const uploadTask = uploadBytesResumable(
-          storageRef,
-          file,
-          metadata.contentType
-        );
-        await uploadTask.on(
-          "state_changed",
-          (snapshot) => {
-            const progress = Math.round(
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-            );
-            setProgressBar(progress);
-          },
-          (error) => {
-            alert(error);
-          },
-          async () => {
-            await getDownloadURL(uploadTask.snapshot.ref).then(
-              (downloadURL) => {
-                setImage(downloadURL);
-              }
-            );
-          }
-        );
-      } catch (err) {
-        dispatch({ type: HANDLE_ERROR });
-        setNotification({ show: true, message: err.message, type: "error" });
-        console.log(err.message);
-      }
-    }
-  };
-
   useEffect(() => {
     const postData = async () => {
       const q = query(collectionRef, orderBy("timestamp", "asc"));
@@ -139,10 +70,8 @@ const Main = () => {
           type: SUBMIT_POST,
           posts: doc?.docs?.map((item) => item?.data()),
         });
-        scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
         setImage(null);
         setFile(null);
-        setProgressBar(0);
       });
     };
     if (collectionRef) {
@@ -167,7 +96,12 @@ const Main = () => {
       {notification && (
         <div className={`notification ${notification.type}`}>
           <span>{notification.message}</span>
-          <button onClick={() => setNotification(null)}>×</button>
+          <button
+            className="notification-close"
+            onClick={() => setNotification(null)}
+          >
+            ×
+          </button>
         </div>
       )}
       <div className="post-form">
@@ -179,7 +113,6 @@ const Main = () => {
           />
         </div>
         <textarea
-          ref={textRef}
           className="post-input"
           placeholder="What's on your mind?"
           value={text}
@@ -189,7 +122,6 @@ const Main = () => {
           <input
             type="file"
             hidden
-            ref={fileRef}
             onChange={handleImageUpload}
           />
           <button
@@ -243,5 +175,4 @@ const Main = () => {
     </div>
   );
 };
-
 export default Main;

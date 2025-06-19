@@ -18,6 +18,7 @@ const RightSide = () => {
   const [input, setInput] = useState("");
   const { user, userData } = useContext(AuthContext);
   const friendList = userData?.friends;
+  const [items, setItems] = useState([{ id: 1, name: "Suggestion 1" }]);
 
   const searchFriends = (data) => {
     return data.filter((item) =>
@@ -36,8 +37,7 @@ const RightSide = () => {
   };
 
   const handleRemove = (id) => {
-    console.log("Removing item:", id);
-    // Implement remove functionality
+    setItems(items.filter((item) => item.id !== id));
   };
 
   return (

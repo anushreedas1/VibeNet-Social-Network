@@ -1,17 +1,15 @@
-import React, { useContext, useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { AuthContext } from "../AppContext/AppContext";
 import { socialImages } from '../../assets/images/social';
 import nature from "../../assets/images/nature.jpg";
-import { AuthContext } from "../AppContext/AppContext";
 import './LeftSide.css';
-import { FaLaptop, FaPhotoVideo, FaAppStore, FaTiktok, FaFacebook, FaTwitter } from 'react-icons/fa';
-import { CgProfile } from 'react-icons/cg';
+import { FaAppStore, FaLaptop, FaPhotoVideo, FaTiktok, FaFacebook, FaTwitter } from 'react-icons/fa';
 
 const LeftSide = () => {
   const [data, setData] = useState([]);
   const count = useRef(0);
   const { user, userData } = useContext(AuthContext);
-  const navigate = useNavigate(); // Replace window.location
+
   const userProfile = {
     avatar: '/path-to-default-avatar.jpg', // Add default avatar path
     job: 'Software Developer', // Add default job title
@@ -177,6 +175,7 @@ const LeftSide = () => {
     </div>
   );
 };
+
 
 
 export default LeftSide;

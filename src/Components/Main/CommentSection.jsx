@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useReducer, useEffect, useState } from "react";
+import React, { useContext, useReducer, useEffect, useState, useRef } from "react";
 import { AuthContext } from "../AppContext/AppContext";
 import {
   setDoc,
@@ -24,8 +24,6 @@ const CommentSection = ({ postId }) => {
   const commentRef = doc(collection(db, "posts", postId, "comments"));
   const [state, dispatch] = useReducer(PostsReducer, postsStates);
   const { ADD_COMMENT, HANDLE_ERROR } = postActions;
-  const [newComment, setNewComment] = useState("");
-  const [userImage, setUserImage] = useState("/default-avatar.png");
 
   const addComment = async (e) => {
     e.preventDefault();
@@ -73,11 +71,11 @@ const CommentSection = ({ postId }) => {
     <div className="flex flex-col bg-white w-full py-2 rounded-b-3xl comment-section">
       <div className="flex items-center">
         <div className="mx-2">
-          <Avatar
-            size="sm"
-            variant="circular"
-            src={user?.photoURL || userImage}
-          ></Avatar>
+          <img
+            src={user?.photoURL || "/default-avatar.png"}
+            alt="User"
+            className="comment-avatar"
+          />
         </div>
         <div className="w-full pr-2">
           <form className="flex items-center w-full" onSubmit={addComment}>

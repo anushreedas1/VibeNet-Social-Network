@@ -126,10 +126,13 @@ const AppContext = ({ children }) => {
   }, [user?.email, collectionUsersRef]); // Add missing dependency
 
   useEffect(() => {
-    if (collectionUsersRef) {
-      // Your effect logic
+    if (user?.email && collectionUsersRef) {
+      const fetchUserData = async () => {
+        // Fetch user data logic
+      };
+      fetchUserData();
     }
-  }, [collectionUsersRef]); // Added missing dependency
+  }, [user?.email, collectionUsersRef]); // Fixed missing dependency
 
   const initialState = {
     signInWithGoogle,
