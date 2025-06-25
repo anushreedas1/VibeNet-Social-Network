@@ -71,62 +71,11 @@ const Left = styled.div`
   }
 `;
 
-const Right = styled.div`
-  width: 50%;
-  position: relative;
-  img {
-    width: 100%;
-    height: auto;
-  }
-
-  .small-img-1 {
-    width: 40%;
-    position: absolute;
-    right: 95%;
-    bottom: 10%;
-  }
-  .small-img-2 {
-    width: 40%;
-    position: absolute;
-    left: 80%;
-    bottom: 30%;
-  }
-
-  @media (max-width: 64em) {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    img {
-      height: 100vh;
-      object-fit: cover;
-    }
-    .small-img-1 {
-      width: 30%;
-      height: auto;
-      left: 5%;
-      bottom: 10%;
-    }
-    .small-img-2 {
-      width: 30%;
-      height: auto;
-      left: 60%;
-      bottom: 20%;
-    }
-  }
-`;
-
 const Abou = () => {
   return (
-    <Section id="fixed-target" className="about">
-      <Title
-        data-scroll
-        data-scroll-speed="-2"
-        data-scroll-direction="horizontal"
-      >
-        About Us
-      </Title>
-      <Left data-scroll data-scroll-sticky data-scroll-target="#fixed-target">
+    <Section className="about">
+      <Title>About Us</Title>
+      <Left>
         VibeNet is a dynamic social networking platform where people connect, share, and engage with each other. Whether you’re looking to meet new friends, share your passions, or stay updated with what’s happening around the world, VibeNet is the place to be.
         <br />
         <br />

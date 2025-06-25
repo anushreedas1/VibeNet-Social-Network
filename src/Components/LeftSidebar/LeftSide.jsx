@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { AuthContext } from "../AppContext/AppContext";
 import { socialImages } from '../../assets/images/social';
 import nature from "../../assets/images/nature.jpg";
@@ -6,7 +6,6 @@ import './LeftSide.css';
 import { FaAppStore, FaLaptop, FaPhotoVideo, FaTiktok, FaFacebook, FaTwitter } from 'react-icons/fa';
 
 const LeftSide = () => {
-  const [data, setData] = useState([]);
   const count = useRef(0);
   const { user, userData } = useContext(AuthContext);
 
@@ -15,34 +14,10 @@ const LeftSide = () => {
     job: 'Software Developer', // Add default job title
   };
 
-  const handleRandom = (arr) => {
-    setData(arr[Math.floor(Math.random() * arr?.length)]);
-  };
-
   useEffect(() => {
-    const imageList = [
-      {
-        id: "1",
-        image: socialImages.laptop,
-      },
-      {
-        id: "2",
-        image: socialImages.media,
-      },
-      {
-        id: "3",
-        image: socialImages.apps,
-      },
-      {
-        id: "4",
-        image: socialImages.tik,
-      },
-    ];
-    handleRandom(imageList);
     let countAds = 0;
     let startAds = setInterval(() => {
       countAds++;
-      handleRandom(imageList);
       count.current = countAds;
       if (countAds === 5) {
         clearInterval(startAds);

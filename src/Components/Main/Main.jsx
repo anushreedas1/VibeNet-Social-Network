@@ -1,5 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { AuthContext } from "../AppContext/AppContext";
+import { FaImage, FaVideo, FaSmile } from "react-icons/fa";
 import "./Main.css";
 import PostCard from "./PostCard";
 import {
@@ -18,12 +19,13 @@ const Main = () => {
   const { user, userData, collectionRef } = useContext(AuthContext);
   const [text, setText] = useState("");
   const [image, setImage] = useState(null);
-  const [file, setFile] = useState(null);
   const [notification, setNotification] = useState(null); // For custom notifications
   const postRef = doc(collection(db, "posts"));
   const document = postRef.id;
   const [state, dispatch] = React.useReducer(PostsReducer, postsStates);
   const { SUBMIT_POST, HANDLE_ERROR } = postActions;
+  const fileRef = useRef(null);
+  const scrollRef = useRef(null);
 
   const handleSubmitPost = async (e) => {
     e.preventDefault();
@@ -71,7 +73,6 @@ const Main = () => {
           posts: doc?.docs?.map((item) => item?.data()),
         });
         setImage(null);
-        setFile(null);
       });
     };
     if (collectionRef) {
@@ -122,6 +123,7 @@ const Main = () => {
           <input
             type="file"
             hidden
+            ref={fileRef}
             onChange={handleImageUpload}
           />
           <button
@@ -143,10 +145,8 @@ const Main = () => {
       </div>
       <div className="flex flex-col py-4 w-full">
         {state?.error ? (
-          <div className="flex justify-center items-center">
-            <Alert color="red">
-              Something went wrong refresh and try again...
-            </Alert>
+          <div className="notification error">
+            Something went wrong, refresh and try again...
           </div>
         ) : (
           <div>

@@ -5,46 +5,24 @@ import * as Yup from "yup";
 import ClipLoader from "react-spinners/ClipLoader";
 import { AuthContext } from "../AppContext/AppContext";
 import { auth, onAuthStateChanged } from "../firebase/firebase";
-import NET from 'vanta/dist/vanta.net.min';
-import * as THREE from 'three';
-import Button from "./Button"; // Adjust the import path if necessary
+import Button from "./Button";
+import Toast from "./Toast";
 import './Auth.css';
 import './Pages.css';
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
-  const { signInWithGoogle, loginWithEmailAndPassword } = useContext(AuthContext);
+  const [toast, setToast] = useState({ message: '', type: 'error' });
+  const { loginWithEmailAndPassword } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [vantaEffect, setVantaEffect] = useState(null);
 
-  useEffect(() => {
-    if (!vantaEffect) {
-      setVantaEffect(NET({
-        el: document.body,
-        THREE: THREE,
-        mouseControls: true,
-        touchControls: true,
-        gyroControls: false,
-        minHeight: 200.00,
-        minWidth: 200.00,
-        scale: 1.00,
-        scaleMobile: 1.00,
-        color: 0x0,
-        backgroundColor: 0x111111,
-        points: 20.00,
-        maxDistance: 30.00,
-        spacing: 20.00,
-        showDots: false
-      }));
-    }
-    return () => {
-      if (vantaEffect) vantaEffect.destroy();
-    };
-  }, [vantaEffect]);
+  const showToast = (message, type = 'error') => {
+    setToast({ message, type });
+  };
 
   useEffect(() => {
     setLoading(true);
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         navigate("/");
         setLoading(false);
@@ -52,6 +30,7 @@ const Login = () => {
         setLoading(false);
       }
     });
+    return () => unsubscribe();
   }, [navigate]);
 
   const formik = useFormik({
@@ -60,80 +39,76 @@ const Login = () => {
       password: "",
     },
     validationSchema: Yup.object({
-      email: Yup.string().email("Invalid email address").required("Required"),
+      email: Yup.string().email("Invalid email address").required("Email is required"),
       password: Yup.string()
-        .required("Required")
-        .min(6, "Must be at least 6 characters long")
-        .matches(/^[a-zA-Z]+$/, "Password can only contain letters"),
+        .required("Password is required")
+        .min(6, "Must be at least 6 characters long"),
     }),
     onSubmit: async (values) => {
       setLoading(true);
       try {
         await loginWithEmailAndPassword(values.email, values.password);
-        navigate("/"); // Redirect on successful login
+        showToast('Login successful! Redirecting...', 'success');
+        setTimeout(() => navigate("/"), 1200);
       } catch (error) {
         setLoading(false);
-        alert("Login failed. Please check your credentials.");
+        showToast("Login failed. Please check your credentials.");
       }
     },
+    validateOnChange: false,
+    validateOnBlur: false,
   });
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    formik.handleSubmit();
+    if (Object.keys(formik.errors).length > 0) {
+      const firstError = Object.values(formik.errors)[0];
+      showToast(firstError);
+    }
+  };
 
   return (
     <div className="login-page flex items-center justify-center min-h-screen">
+      <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: '', type: 'error' })} />
       {loading ? (
         <div className="grid grid-cols-1 justify-items-center items-center">
-          <ClipLoader color="#ffffff" size={150} speedMultiplier={0.5} />
+          <ClipLoader color="#ffffff" size={90} speedMultiplier={0.5} />
         </div>
       ) : (
-        <div className="auth-container">
-          <h1 className="auth-title">Sign In</h1>
-          <form className="auth-form" onSubmit={formik.handleSubmit}>
+        <div className="auth-container glass-card">
+          <h2 className="auth-title">Sign In</h2>
+          <form onSubmit={handleFormSubmit} className="auth-form">
             <div className="form-group">
               <input
                 type="email"
                 className="form-input"
                 placeholder="Email"
-                required
                 name="email"
-                {...formik.getFieldProps("email")}
-                onFocus={() => formik.setFieldTouched("email", true)}
-                onBlur={() => formik.setFieldTouched("email", formik.values.email !== '')}
+                {...formik.getFieldProps('email')}
+                autoComplete="off"
               />
-              {formik.touched.email && formik.errors.email && (
-                <p className="error-message">
-                  {formik.errors.email}
-                </p>
-              )}
             </div>
             <div className="form-group">
               <input
                 type="password"
                 className="form-input"
                 placeholder="Password"
-                required
                 name="password"
-                {...formik.getFieldProps("password")}
-                onFocus={() => formik.setFieldTouched("password", true)}
-                onBlur={() => formik.setFieldTouched("password", formik.values.password !== '')}
+                {...formik.getFieldProps('password')}
+                autoComplete="current-password"
               />
-              {formik.touched.password && formik.errors.password && (
-                <p className="error-message">
-                  {formik.errors.password}
-                </p>
-              )}
             </div>
-            <div className="my-5"></div> 
-
-
             <Button
-              label="Login"
+              label={loading ? "Signing in..." : "Sign In"}
               type="submit"
-              className="w-full h-12 flex items-center justify-center"
+              className="auth-button"
+              disabled={loading}
             />
           </form>
           <div className="auth-links">
-            <Link to="/reset" className="auth-link">Forgot Password?</Link>
-            <Link to="/register" className="auth-link">Don't have an account? Sign Up</Link>
+            <Link to="/reset" className="auth-link">Forgot password?</Link>
+            <Link to="/register" className="auth-link">Don't have an account? Register</Link>
           </div>
         </div>
       )}

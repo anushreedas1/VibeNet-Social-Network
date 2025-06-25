@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import waterslide from "../../assets/images/waterslide.jpg";
+import remove from "../../assets/images/delete.png";
 import { AuthContext } from "../AppContext/AppContext";
 import { Link } from "react-router-dom";
 import "./RightSide.css";

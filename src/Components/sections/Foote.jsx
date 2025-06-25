@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 import Logo from "../../assets/Svgs/star_white_48dp.svg";
 import { motion } from "framer-motion";
-import { useLocomotiveScroll } from "react-locomotive-scroll";
 
 const Section = styled.section`
   min-height: 100vh;
@@ -111,33 +110,24 @@ const Bottom = styled.div`
 `;
 
 const Foote = () => {
-  const { scroll } = useLocomotiveScroll();
-
   const handleScroll = (id) => {
-    let elem = document.querySelector(id);
-
-    scroll.scrollTo(elem, {
-      offset: "-100",
-      duration: "2000",
-      easing: [0.25, 0.0, 0.35, 1.0],
-    });
+    const elem = document.querySelector(id);
+    if (elem) {
+      elem.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (
     <Section>
       <LogoContainer>
-        <img data-scroll data-scroll-speed="2" src={Logo} alt="VibeNet" />
-        <h3 data-scroll data-scroll-speed="-1">
-          VibeNet
-        </h3>
+        <img src={Logo} alt="VibeNet" />
+        <h3>VibeNet</h3>
       </LogoContainer>
       <FooterComponent
         initial={{ y: "-400px" }}
         whileInView={{ y: 0 }}
         viewport={{ once: false }}
-        transition={{
-          duration: 1.5,
-        }}
+        transition={{ duration: 1.5 }}
       >
         <ul>
           <li onClick={() => handleScroll("#home")}>home</li>
@@ -148,22 +138,17 @@ const Foote = () => {
             </a>
           </li>
           <li>
-            <a href="https://google.com" target="_blank" rel="noreferrer">
-              reviews
-            </a>
+            <a href="mailto:admin@vibenet.com">contact</a>
           </li>
         </ul>
-        <Bottom>
-          <span
-            data-scroll
-            data-scroll-speed="2"
-            data-scroll-direction="horizontal"
-          >
-            &copy; {new Date().getFullYear()}. All Rights Reserved.
-          </span>
-          
-        </Bottom>
       </FooterComponent>
+      <Bottom>
+        <span>© {new Date().getFullYear()} VibeNet. All rights reserved.</span>
+        <span>
+          <a href="/privacy">Privacy Policy</a> |{" "}
+          <a href="/terms">Terms of Service</a>
+        </span>
+      </Bottom>
     </Section>
   );
 };

@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { useLocomotiveScroll } from "react-locomotive-scroll";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom for navigation
+import { Link } from "react-router-dom";
 
 const NavContainer = styled(motion.div)`
   width: 100vw;
@@ -85,74 +84,33 @@ const MenuItem = styled(motion.li)`
 const NavBar = () => {
   const [click, setClick] = useState(false);
 
-  const { scroll } = useLocomotiveScroll();
-
   const handleScroll = (id) => {
     let elem = document.querySelector(id);
+    if (!elem) return;
     setClick(!click);
-    scroll.scrollTo(elem, {
-      offset: "-100",
-      duration: "2000",
-      easing: [0.25, 0.0, 0.35, 1.0],
-    });
+    elem.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <NavContainer
       click={+click}
-      initial={{
-        y: "-100%",
-      }}
-      animate={{
-        y: 0,
-      }}
-      transition={{
-        duration: 2,
-        delay: 5,
-      }}
+      initial={{ y: "-100%" }}
+      animate={{ y: 0 }}
+      transition={{ duration: 2, delay: 5 }}
     >
       <MenuItems
         drag="y"
-        dragConstraints={{
-          top: 0,
-          bottom: 70,
-        }}
+        dragConstraints={{ top: 0, bottom: 70 }}
         dragElastic={0.05}
         dragSnapToOrigin
       >
         <MenuBtn onClick={() => setClick(!click)}>Menu</MenuBtn>
-        <MenuItem
-          onClick={() => handleScroll("#home")}
-          whileHover={{ scale: 1.1, y: -5 }}
-          whileTap={{ scale: 0.9, Y: 0 }}
-        >
-          Home
-        </MenuItem>
-        <MenuItem
-          onClick={() => handleScroll(".about")}
-          whileHover={{ scale: 1.1, y: -5 }}
-          whileTap={{ scale: 0.9, Y: 0 }}
-        >
-          About
-        </MenuItem>
-
-        {/* Replacing 'Shop' with 'Register' and linking to Register page */}
-        <MenuItem
-          as={Link} // Use Link component for navigation
-          to="/register"
-          whileHover={{ scale: 1.1, y: -5 }}
-          whileTap={{ scale: 0.9, Y: 0 }}
-        >
+        <MenuItem onClick={() => handleScroll("#home")}>Home</MenuItem>
+        <MenuItem onClick={() => handleScroll(".about")}>About</MenuItem>
+        <MenuItem as={Link} to="/register">
           Register
         </MenuItem>
-
-        {/* Replacing 'New Arrival' with 'Login' and linking to Login page */}
-        <MenuItem
-          as={Link} // Use Link component for navigation
-          to="/login"
-          whileHover={{ scale: 1.1, y: -5 }}
-          whileTap={{ scale: 0.9, Y: 0 }}
-        >
+        <MenuItem as={Link} to="/login">
           Login
         </MenuItem>
       </MenuItems>

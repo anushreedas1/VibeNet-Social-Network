@@ -98,32 +98,29 @@ const AppContext = ({ children }) => {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [collectionUsersRef]);
 
   // Handle navigation after auth state is established
   useEffect(() => {
     if (!loading) {
       // Only navigate after loading is complete
-      if (user === null) {
-        navigate("/"); // Navigate to the landing page if no user is authenticated
-      } else {
+      if (user) {
         navigate("/home"); // Navigate to home if user is logged in
       }
+      // Do NOT navigate to landing page if not logged in; allow login/register
     }
   }, [user, loading, navigate]);
 
   useEffect(() => {
     const getUserData = async () => {
-      const q = query(collectionUsersRef, where("email", "==", user.email));
+      const q = query(collectionUsersRef, where("email", "==", user?.email));
       const snapshot = await getDocs(q);
       if (snapshot.docs.length > 0) {
         setUserData(snapshot.docs[0].data());
       }
     };
-    if (user?.email) {
-      getUserData();
-    }
-  }, [user?.email, collectionUsersRef]); // Add missing dependency
+    if (user) getUserData();
+  }, [user, collectionUsersRef]);
 
   useEffect(() => {
     if (user?.email && collectionUsersRef) {
@@ -132,7 +129,7 @@ const AppContext = ({ children }) => {
       };
       fetchUserData();
     }
-  }, [user?.email, collectionUsersRef]); // Fixed missing dependency
+  }, [user?.email, collectionUsersRef]); // Added missing dependency
 
   const initialState = {
     signInWithGoogle,

@@ -16,3 +16,44 @@ html, body {
   overflow: hidden; /* Hides any overflowing content */
   box-sizing: border-box;
 }
+
+/* Add a robust animated gradient background */
+.css-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  background: linear-gradient(270deg, #18191a, #1a73e8, #cf30aa, #18191a);
+  background-size: 600% 600%;
+  animation: gradientBG 16s ease infinite;
+  pointer-events: none; /* Ensure background never blocks clicks */
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.spooky-bg-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.login-page, .register-page, .reset-page {
+  position: relative;
+  z-index: 1;
+}
+
+.auth-container.glass-card {
+  position: relative;
+  z-index: 2;
+}

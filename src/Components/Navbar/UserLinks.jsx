@@ -1,6 +1,4 @@
 import React, { useContext } from "react";
-import { Tooltip } from "@material-tailwind/react";
-import { Avatar } from "@material-tailwind/react";
 import avatar from "../../assets/images/avatar.jpg";
 import { AuthContext } from "../AppContext/AppContext";
 
@@ -8,15 +6,15 @@ const UserLinks = () => {
   const { signOutUser, user, userData } = useContext(AuthContext);
 
   return (
-    <div className="flex justify-center items-center cursor-pointer">
-      <div className="hover:translate-y-1 duration-500 ease-in-out text-white hover:text-blue-500">
+    <div className="user-links">
+      <div className="user-icon">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth="1.5"
           stroke="currentColor"
-          className="w-6 h-6"
+          className="icon-svg"
         >
           <path
             strokeLinecap="round"
@@ -25,14 +23,14 @@ const UserLinks = () => {
           />
         </svg>
       </div>
-      <div className="hover:translate-y-1 duration-500 ease-in-out text-white hover:text-blue-500 mx-4">
+      <div className="user-icon">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth="1.5"
           stroke="currentColor"
-          className="w-6 h-6"
+          className="icon-svg"
         >
           <path
             strokeLinecap="round"
@@ -41,14 +39,14 @@ const UserLinks = () => {
           />
         </svg>
       </div>
-      <div className="hover:translate-y-1 duration-500 ease-in-out text-white hover:text-blue-500">
+      <div className="user-icon">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth="1.5"
           stroke="currentColor"
-          className="w-6 h-6"
+          className="icon-svg"
         >
           <path
             strokeLinecap="round"
@@ -57,18 +55,15 @@ const UserLinks = () => {
           />
         </svg>
       </div>
-      <div className="mx-4 flex items-center" onClick={signOutUser}>
-        <Tooltip content="Sign Out" placement="bottom">
-          <Avatar
-            src={user?.photoURL || avatar}
-            size="sm"
-            alt="avatar"
-          />
-        </Tooltip>
-        <p className="ml-4 font-roboto text-sm text-white font-medium no-underline">
+      <div className="user-avatar-container" onClick={signOutUser}>
+        <img
+          src={user?.photoURL || avatar}
+          alt="avatar"
+          className="user-avatar"
+        />
+        <p className="user-name">
           {user?.displayName === null && userData?.name !== undefined
-            ? userData?.name?.charAt(0)?.toUpperCase() +
-              userData?.name?.slice(1)
+            ? userData?.name?.charAt(0)?.toUpperCase() + userData?.name?.slice(1)
             : user?.displayName?.split(" ")[0]}
         </p>
       </div>

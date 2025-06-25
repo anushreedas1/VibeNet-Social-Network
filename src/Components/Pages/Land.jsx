@@ -1,18 +1,15 @@
 import { ThemeProvider } from "styled-components";
 import GlobalStyles from "../styles/GlobalStyles";
 import { dark } from "../styles/Themes";
-import { LocomotiveScrollProvider } from "react-locomotive-scroll";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import Lan from "../sections/Lan";
 import { AnimatePresence } from "framer-motion";
 import Abou from "../sections/Abou";
-import ScrollTriggerProxy from './comp/ScrollTriggerProxy';
 import Foote from '../sections/Foote';
 import Loader from "./comp/Loader";
 
 function Land() {
-  const containerRef = useRef(null);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -35,25 +32,12 @@ function Land() {
       <ThemeProvider theme={dark}>
         <AnimatePresence>
           {loaded ? (
-            // Render LocomotiveScrollProvider only after loading is complete
-            <LocomotiveScrollProvider
-              options={{
-                smooth: true,
-                smartphone: { smooth: true },
-                tablet: { smooth: true },
-              }}
-              watch={[]}
-              containerRef={containerRef}
-            >
-              <ScrollTriggerProxy />
-              <main className="App" data-scroll-container ref={containerRef}>
-                <Lan />
-                <Abou />
-                <Foote />
-              </main>
-            </LocomotiveScrollProvider>
+            <main className="App">
+              <Lan />
+              <Abou />
+              <Foote />
+            </main>
           ) : (
-            // Show loader while `loaded` is false
             <Loader />
           )}
         </AnimatePresence>

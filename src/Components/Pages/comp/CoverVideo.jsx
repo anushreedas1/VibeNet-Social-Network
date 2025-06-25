@@ -99,76 +99,21 @@ const item = {
   },
 };
 
-
 const CoverVideo = () => {
   return (
     <VideoContainer>
       <DarkOverlay />
       <Title variants={container} initial="hidden" animate="show">
         <div>
-          <motion.h1
-            variants={item}
-            data-scroll
-            data-scroll-delay="0.13"
-            data-scroll-speed="4"
-          >
-            V
-          </motion.h1>
-          <motion.h1
-            variants={item}
-            data-scroll
-            data-scroll-delay="0.09"
-            data-scroll-speed="4"
-          >
-            i
-          </motion.h1>
-          <motion.h1
-            variants={item}
-            data-scroll
-            data-scroll-delay="0.06"
-            data-scroll-speed="4"
-          >
-            b
-          </motion.h1>
-          <motion.h1
-            variants={item}
-            data-scroll
-            data-scroll-delay="0.04"
-            data-scroll-speed="4"
-          >
-            e
-          </motion.h1>
-          <motion.h1
-            variants={item}
-            data-scroll
-            data-scroll-delay="0.02"
-            data-scroll-speed="4"
-          >
-            N
-          </motion.h1>
-          <motion.h1
-            variants={item}
-            data-scroll
-            data-scroll-delay="0.01"
-            data-scroll-speed="4"
-          >
-            e
-          </motion.h1>
-          <motion.h1
-            variants={item}
-            data-scroll
-            data-scroll-delay="0.01"
-            data-scroll-speed="4"
-          >
-            t
-          </motion.h1>
+          <motion.h1 variants={item}>V</motion.h1>
+          <motion.h1 variants={item}>i</motion.h1>
+          <motion.h1 variants={item}>b</motion.h1>
+          <motion.h1 variants={item}>e</motion.h1>
+          <motion.h1 variants={item}>N</motion.h1>
+          <motion.h1 variants={item}>e</motion.h1>
+          <motion.h1 variants={item}>t</motion.h1>
         </div>
-        <motion.h2
-          variants={item}
-          data-scroll
-          data-scroll-delay="0.04"
-          data-scroll-speed="2"
-        >
+        <motion.h2 variants={item}>
           Voice Interaction Broadcast Engagement Network
         </motion.h2>
       </Title>
