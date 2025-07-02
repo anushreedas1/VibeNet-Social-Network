@@ -5,19 +5,19 @@ import AppContext from "./Components/AppContext/AppContext";
 import { AnimatedCursor } from "./Components/AnimatedCursor";
 import { AnimatePresence } from "framer-motion";
 import ErrorBoundary from "./Components/ErrorBoundary";
-import Background from "./Components/Background/Background";
+import React, { useState } from "react";
 
 
 function App() {
+  const [darkMode, setDarkMode] = useState(true);
   return (
     <ErrorBoundary>
       <div className="relative">
-        <Background />
         <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <AppContext>
             <AnimatedCursor />
             <AnimatePresence mode="wait">
-              <Pages />
+              <Pages darkMode={darkMode} setDarkMode={setDarkMode} />
             </AnimatePresence>
           </AppContext>
         </BrowserRouter>

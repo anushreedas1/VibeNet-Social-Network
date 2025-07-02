@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import waterslide from "../../assets/images/waterslide.jpg";
 import remove from "../../assets/images/delete.png";
 import { AuthContext } from "../AppContext/AppContext";
@@ -12,14 +12,46 @@ import {
   getDocs,
   arrayRemove,
   updateDoc,
+  arrayUnion,
 } from "firebase/firestore";
 import { db } from "../firebase/firebase";
+import styled from "styled-components";
+
+const SidebarContainer = styled.div`
+  background: ${({ theme }) => theme.card};
+  border-radius: 18px;
+  box-shadow: 0 2px 16px rgba(26,115,232,0.06);
+  padding: 24px 18px;
+  margin-top: 24px;
+  min-width: 260px;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 24px;
+`;
 
 const RightSide = () => {
   const [input, setInput] = useState("");
   const { user, userData } = useContext(AuthContext);
   const friendList = userData?.friends;
   const [items, setItems] = useState([{ id: 1, name: "Suggestion 1" }]);
+  const [suggestions, setSuggestions] = useState([]);
+
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      if (!user) return;
+      const usersSnap = await getDocs(collection(db, "users"));
+      const users = usersSnap.docs.map((doc) => doc.data());
+      const currentUser = users.find((u) => u.uid === user.uid);
+      const following = currentUser?.following || [];
+      const notFollowed = users.filter(
+        (u) => u.uid !== user.uid && !following.includes(u.uid)
+      );
+      setSuggestions(notFollowed);
+    };
+    fetchSuggestions();
+  }, [user]);
 
   const searchFriends = (data) => {
     return data.filter((item) =>
@@ -41,8 +73,26 @@ const RightSide = () => {
     setItems(items.filter((item) => item.id !== id));
   };
 
+  const handleFollow = async (uid) => {
+    if (!user || !uid || user.uid === uid) return;
+    // Add to following for current user
+    const usersSnap = await getDocs(collection(db, "users"));
+    const userDocSnap = usersSnap.docs.find((d) => d.data().uid === user.uid);
+    const userRef = userDocSnap?.ref;
+    // Add to followers for suggested user
+    const suggestedDocSnap = usersSnap.docs.find((d) => d.data().uid === uid);
+    const suggestedRef = suggestedDocSnap?.ref;
+    try {
+      await updateDoc(userRef, { following: arrayUnion(uid) });
+      await updateDoc(suggestedRef, { followers: arrayUnion(user.uid) });
+      setSuggestions((prev) => prev.filter((s) => s.uid !== uid));
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
   return (
-    <div className="flex flex-col h-screen bg-gray-800 shadow-lg border-2 rounded-l-xl">
+    <SidebarContainer>
       <div className="flex flex-col items-center relative pt-10">
         <img className="h-48 rounded-md" src={waterslide} alt="nature"></img>
       </div>
@@ -102,6 +152,26 @@ const RightSide = () => {
           </p>
         )}
       </div>
+      <div className="mx-2 mt-10">
+        <p className="font-roboto font-medium text-sm text-white no-underline tracking-normal leading-none">
+          Friend Suggestions:
+        </p>
+        <div>
+          {suggestions.length === 0 && <p className="text-white">No suggestions</p>}
+          {suggestions.map((s) => (
+            <div key={s.uid} className="flex items-center my-2">
+              <img src={s.image || "/default-avatar.png"} alt="avatar" className="suggestion-avatar" />
+              <span className="text-white ml-2">{s.name}</span>
+              <button
+                className="follow-button ml-auto"
+                onClick={() => handleFollow(s.uid)}
+              >
+                Follow
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
       <div className="suggestion-actions">
         <button
           className="remove-button"
@@ -110,7 +180,7 @@ const RightSide = () => {
           Remove
         </button>
       </div>
-    </div>
+    </SidebarContainer>
   );
 };
 

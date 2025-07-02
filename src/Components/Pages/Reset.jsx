@@ -7,6 +7,7 @@ import Toast from "./Toast";
 import './Pages.css';
 // import emailjs for frontend email sending
 import emailjs from '@emailjs/browser';
+import ParticlesBackground from '../Background/ParticlesBackground';
 
 const Reset = () => {
   const [toast, setToast] = useState({ message: '', type: 'error' });
@@ -54,35 +55,38 @@ const Reset = () => {
   };
 
   return (
-    <div className="reset-page">
-      <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: '', type: 'error' })} />
-      <div className="auth-container glass-card">
-        <h2 className="auth-title">Reset Your Password</h2>
-        <p className="auth-subtitle">Enter your email and we'll send you a password reset link.</p>
-        <form className="auth-form" onSubmit={handleFormSubmit}>
-          <div className="form-group">
-            <input
-              type="email"
-              className="form-input"
-              placeholder="Enter your email"
-              name="email"
-              {...formik.getFieldProps("email")}
-              autoComplete="off"
-              required
+    <>
+      <ParticlesBackground />
+      <div className="reset-page">
+        <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: '', type: 'error' })} />
+        <div className="auth-container glass-card">
+          <h2 className="auth-title">Reset Your Password</h2>
+          <p className="auth-subtitle">Enter your email and we'll send you a password reset link.</p>
+          <form className="auth-form" onSubmit={handleFormSubmit}>
+            <div className="form-group">
+              <input
+                type="email"
+                className="form-input"
+                placeholder="Enter your email"
+                name="email"
+                {...formik.getFieldProps("email")}
+                autoComplete="off"
+                required
+              />
+            </div>
+            <Button
+              label={loading ? "Sending..." : "Send Reset Link"}
+              type="submit"
+              className="auth-button"
+              disabled={loading}
             />
+          </form>
+          <div className="auth-links">
+            <Link to="/login" className="auth-link">Back to Login</Link>
           </div>
-          <Button
-            label={loading ? "Sending..." : "Send Reset Link"}
-            type="submit"
-            className="auth-button"
-            disabled={loading}
-          />
-        </form>
-        <div className="auth-links">
-          <Link to="/login" className="auth-link">Back to Login</Link>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

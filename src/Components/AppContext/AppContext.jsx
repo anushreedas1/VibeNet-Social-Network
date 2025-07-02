@@ -139,6 +139,7 @@ const AppContext = ({ children }) => {
     signOutUser,
     user,
     userData,
+    collectionRef: collection(db, "posts"),
   };
 
   return (

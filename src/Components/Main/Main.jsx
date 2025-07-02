@@ -11,9 +11,14 @@ import {
   query,
   serverTimestamp,
   setDoc,
+  limit,
+  startAfter,
+  getDocs,
 } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { PostsReducer, postActions, postsStates } from "../AppContext/PostReducer";
+
+const POSTS_PAGE_SIZE = 5;
 
 const Main = () => {
   const { user, userData, collectionRef } = useContext(AuthContext);
@@ -26,6 +31,19 @@ const Main = () => {
   const { SUBMIT_POST, HANDLE_ERROR } = postActions;
   const fileRef = useRef(null);
   const scrollRef = useRef(null);
+  const [lastVisible, setLastVisible] = useState(null);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [following, setFollowing] = useState([]);
+
+  // Fetch following list
+  useEffect(() => {
+    if (userData?.following) {
+      setFollowing(userData.following);
+    } else {
+      setFollowing([]);
+    }
+  }, [userData]);
 
   const handleSubmitPost = async (e) => {
     e.preventDefault();
@@ -65,21 +83,83 @@ const Main = () => {
   };
 
   useEffect(() => {
-    const postData = async () => {
-      const q = query(collectionRef, orderBy("timestamp", "asc"));
-      await onSnapshot(q, (doc) => {
+    let unsubscribe = null;
+    if (collectionRef) {
+      try {
+        const q = query(collectionRef, orderBy("timestamp", "desc"), limit(POSTS_PAGE_SIZE));
+        unsubscribe = onSnapshot(q, (docSnap) => {
+          let posts = docSnap.docs.map((item) => item.data());
+          // Personalize: only show posts from following or self
+          if (user?.uid && following.length > 0) {
+            posts = posts.filter(
+              (p) => following.includes(p.uid) || p.uid === user.uid
+            );
+          } else if (user?.uid) {
+            posts = posts.filter((p) => p.uid === user.uid);
+          }
+          dispatch({ type: SUBMIT_POST, posts });
+          setImage(null);
+          setLastVisible(docSnap.docs[docSnap.docs.length - 1]);
+          setHasMore(docSnap.docs.length === POSTS_PAGE_SIZE);
+        });
+      } catch (err) {
+        dispatch({ type: HANDLE_ERROR });
+        setNotification({ show: true, message: err.message, type: "error" });
+        console.log(err.message);
+      }
+    }
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, [SUBMIT_POST, collectionRef, user?.uid, following, HANDLE_ERROR]);
+
+  const fetchMorePosts = async () => {
+    if (!collectionRef || !lastVisible || !hasMore) return;
+    setLoadingMore(true);
+    try {
+      const q = query(
+        collectionRef,
+        orderBy("timestamp", "desc"),
+        startAfter(lastVisible),
+        limit(POSTS_PAGE_SIZE)
+      );
+      const docSnap = await getDocs(q);
+      const morePosts = docSnap.docs.map((item) => item.data());
+      if (morePosts.length > 0) {
         dispatch({
           type: SUBMIT_POST,
-          posts: doc?.docs?.map((item) => item?.data()),
+          posts: [...state.posts, ...morePosts],
         });
-        setImage(null);
-      });
-    };
-    if (collectionRef) {
-      postData();
+        setLastVisible(docSnap.docs[docSnap.docs.length - 1]);
+        setHasMore(docSnap.docs.length === POSTS_PAGE_SIZE);
+      } else {
+        setHasMore(false);
+      }
+    } catch (err) {
+      setNotification({ show: true, message: err.message, type: "error" });
+      setHasMore(false);
     }
-    return () => postData();
-  }, [SUBMIT_POST, collectionRef]);
+    setLoadingMore(false);
+  };
+
+  useEffect(() => {
+    if (!hasMore) return;
+    const observer = new window.IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !loadingMore) {
+          fetchMorePosts();
+        }
+      },
+      { threshold: 1 }
+    );
+    if (scrollRef.current) {
+      observer.observe(scrollRef.current);
+    }
+    return () => {
+      if (scrollRef.current) observer.unobserve(scrollRef.current);
+    };
+    // eslint-disable-next-line
+  }, [scrollRef, lastVisible, hasMore, loadingMore, HANDLE_ERROR]);
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -150,28 +230,51 @@ const Main = () => {
           </div>
         ) : (
           <div>
-            {state?.posts?.length > 0 &&
-              state?.posts?.map((post, index) => {
-                return (
-                  <PostCard
-                    key={index}
-                    logo={post?.logo}
-                    id={post?.documentId}
-                    uid={post?.uid}
-                    name={post?.name}
-                    email={post?.email}
-                    image={post?.image}
-                    text={post?.text}
-                    timestamp={new Date(
-                      post?.timestamp?.toDate()
-                    )?.toUTCString()}
-                  ></PostCard>
-                );
-              })}
+            {(state?.posts?.length > 0
+              ? state?.posts
+              : [
+                  {
+                    logo: "/default-avatar.png",
+                    id: "demo1",
+                    uid: "demo-uid-1",
+                    name: "Demo User 1",
+                    email: "demo1@vibenet.com",
+                    image: "/assets/images/1.webp",
+                    text: "Welcome to VibeNet! This is a demo post.",
+                    timestamp: new Date().toUTCString(),
+                  },
+                  {
+                    logo: "/default-avatar.png",
+                    id: "demo2",
+                    uid: "demo-uid-2",
+                    name: "Demo User 2",
+                    email: "demo2@vibenet.com",
+                    image: "/assets/images/2.webp",
+                    text: "Share your first post and connect with friends!",
+                    timestamp: new Date().toUTCString(),
+                  },
+                ]
+            ).map((post, index) => {
+              return (
+                <PostCard
+                  key={index}
+                  logo={post?.logo}
+                  id={post?.documentId || post?.id}
+                  uid={post?.uid}
+                  name={post?.name}
+                  email={post?.email}
+                  image={post?.image}
+                  text={post?.text}
+                  timestamp={post?.timestamp}
+                ></PostCard>
+              );
+            })}
+            {loadingMore && <div>Loading more posts...</div>}
+            {!hasMore && state?.posts?.length > 0 && <div>No more posts.</div>}
           </div>
         )}
       </div>
-      <div ref={scrollRef}>{/* refference for later */}</div>
+      <div ref={scrollRef} style={{ height: 1 }} />
     </div>
   );
 };

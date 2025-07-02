@@ -2,17 +2,23 @@ import React, { useState, useEffect } from "react";
 import LeftSide from "../LeftSidebar/LeftSide";
 import Navbar from "../Navbar/Navbar";
 import RightSide from "../RightSidebar/RightSide";
-import Main from "../Main/Main";
 import profilePic from "../../assets/images/profilePic.jpg";
 import avatar from "../../assets/images/avatar.jpg";
-import { collection, where, query, onSnapshot } from "firebase/firestore";
+import { collection, where, query, onSnapshot, getDocs, updateDoc, arrayUnion, arrayRemove, doc } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { useParams } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../AppContext/AppContext";
 import "./Pages.css";
 
 const FriendProfile = () => {
   const { id } = useParams();
   const [profile, setProfile] = useState(null);
+  const { user } = useContext(AuthContext);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [userPosts, setUserPosts] = useState([]);
+  const [followersData, setFollowersData] = useState([]);
+  const [followingData, setFollowingData] = useState([]);
 
   useEffect(() => {
     const getUserProfile = async () => {
@@ -23,6 +29,80 @@ const FriendProfile = () => {
     };
     getUserProfile();
   }, [id]);
+
+  useEffect(() => {
+    // Check if current user is following this profile
+    const checkFollowing = async () => {
+      if (!user || !id || user.uid === id) return;
+      const q = query(collection(db, "users"), where("uid", "==", user.uid));
+      const docSnap = await getDocs(q);
+      const userDoc = docSnap.docs[0]?.data();
+      setIsFollowing(userDoc?.following?.includes(id));
+    };
+    checkFollowing();
+  }, [user, id]);
+
+  // Fetch this user's posts
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const q = query(collection(db, "posts"), where("uid", "==", id));
+      const snap = await getDocs(q);
+      setUserPosts(snap.docs.map((d) => d.data()));
+    };
+    fetchPosts();
+  }, [id]);
+
+  // Fetch followers/following user data
+  useEffect(() => {
+    const fetchUsers = async (uids, setter) => {
+      if (!uids || uids.length === 0) { setter([]); return; }
+      const usersSnap = await getDocs(collection(db, "users"));
+      const users = usersSnap.docs.map((doc) => doc.data());
+      const filtered = users.filter((u) => uids.includes(u.uid));
+      setter(filtered);
+    };
+    fetchUsers(profile?.followers, setFollowersData);
+    fetchUsers(profile?.following, setFollowingData);
+  }, [profile]);
+
+  const handleFollow = async () => {
+    if (!user || !id || user.uid === id) return;
+    // Add to following for current user
+    const q = query(collection(db, "users"), where("uid", "==", user.uid));
+    const docSnap = await getDocs(q);
+    const userRef = docSnap.docs[0]?.ref;
+    // Add to followers for profile user
+    const q2 = query(collection(db, "users"), where("uid", "==", id));
+    const docSnap2 = await getDocs(q2);
+    const profileRef = docSnap2.docs[0]?.ref;
+    try {
+      await updateDoc(userRef, { following: arrayUnion(id) });
+      await updateDoc(profileRef, { followers: arrayUnion(user.uid) });
+      setIsFollowing(true);
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  const handleUnfollow = async () => {
+    if (!user || !id || user.uid === id) return;
+    // Remove from following for current user
+    const q = query(collection(db, "users"), where("uid", "==", user.uid));
+    const docSnap = await getDocs(q);
+    const userRef = docSnap.docs[0]?.ref;
+    // Remove from followers for profile user
+    const q2 = query(collection(db, "users"), where("uid", "==", id));
+    const docSnap2 = await getDocs(q2);
+    const profileRef = docSnap2.docs[0]?.ref;
+    try {
+      await updateDoc(userRef, { following: arrayRemove(id) });
+      await updateDoc(profileRef, { followers: arrayRemove(user.uid) });
+      setIsFollowing(false);
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
   console.log(profile);
 
   return (
@@ -47,7 +127,8 @@ const FriendProfile = () => {
                   <img
                     src={profile?.image || avatar}
                     alt="avatar"
-                    className="w-24 h-24 rounded-full"
+                    className="profile-avatar"
+                    style={{ width: 120, height: 120, borderRadius: '50%', objectFit: 'cover', border: '3px solid #fff', boxShadow: '0 2px 12px rgba(0,0,0,0.10)' }}
                   />
                   <p className="py-2 font-roboto font-medium text-sm text-white no-underline tracking-normal leading-none">
                     {profile?.email}
@@ -103,9 +184,61 @@ const FriendProfile = () => {
                     </span>
                   </div>
                 </div>
+                {user?.uid !== id && (
+                  <button
+                    className="btn btn-primary mt-2"
+                    onClick={isFollowing ? handleUnfollow : handleFollow}
+                  >
+                    {isFollowing ? "Unfollow" : "Follow"}
+                  </button>
+                )}
               </div>
             </div>
-            <Main></Main>
+            {/* User's posts */}
+            <div className="user-posts mt-6" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
+              <h3 style={{ gridColumn: '1/-1', fontWeight: 600, fontSize: '1.3rem', marginBottom: '1rem' }}>Posts</h3>
+              {userPosts.length === 0 ? (
+                <p style={{ gridColumn: '1/-1' }}>No posts yet.</p>
+              ) : (
+                userPosts.map((post) => (
+                  <div key={post.documentId || post.id} className="bg-white rounded shadow p-4" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    {post.image && <img src={post.image} alt="post" className="profile-post-image" style={{ width: '100%', aspectRatio: '1/1', maxWidth: 320, maxHeight: 320, objectFit: 'cover', borderRadius: 12, marginBottom: 12, background: '#f0f0f0' }} />}
+                    <p style={{ fontSize: '1.05rem', color: '#333', textAlign: 'center' }}>{post.text}</p>
+                  </div>
+                ))
+              )}
+            </div>
+            {/* Followers/Following lists with names/avatars */}
+            <div className="followers-list mt-4">
+              <h3>Followers</h3>
+              <ul>
+                {followersData.length > 0 ? (
+                  followersData.map((f) => (
+                    <li key={f.uid} className="flex items-center my-2">
+                      <img src={f.image || "/default-avatar.png"} alt="avatar" className="w-8 h-8 rounded-full mr-2" />
+                      <a href={`/profile/${f.uid}`}>{f.name}</a>
+                    </li>
+                  ))
+                ) : (
+                  <li>No followers yet.</li>
+                )}
+              </ul>
+            </div>
+            <div className="following-list mt-4">
+              <h3>Following</h3>
+              <ul>
+                {followingData.length > 0 ? (
+                  followingData.map((f) => (
+                    <li key={f.uid} className="flex items-center my-2">
+                      <img src={f.image || "/default-avatar.png"} alt="avatar" className="w-8 h-8 rounded-full mr-2" />
+                      <a href={`/profile/${f.uid}`}>{f.name}</a>
+                    </li>
+                  ))
+                ) : (
+                  <li>Not following anyone yet.</li>
+                )}
+              </ul>
+            </div>
           </div>
         </div>
         <div className="flex-auto w-[20%] fixed right-0 top-12">

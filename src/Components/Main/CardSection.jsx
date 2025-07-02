@@ -1,24 +1,21 @@
 import React from "react";
 import { cardData } from "../../assets/cardData";
 import Card from "./Card";
+import "./CardSection.css";
 
 const CardSection = () => {
   return (
-    <div>
-      <div className="grid grid-cols-5 gap-2 pt-8 mb-10">
-        {cardData.map((card) => {
-          return (
-            <div key={card.id}>
-              <Card
-                id={card.id}
-                name={card.name}
-                img={card.image}
-                status={card.status}
-              ></Card>
-            </div>
-          );
-        })}
-      </div>
+    <div className="card-section-scroll">
+      {cardData.map((card) => (
+        <div key={card.id} className="card-section-item">
+          <Card
+            id={card.id}
+            name={card.name}
+            img={card.image}
+            status={card.status}
+          />
+        </div>
+      ))}
     </div>
   );
 };

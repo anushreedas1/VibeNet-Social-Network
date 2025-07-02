@@ -12,7 +12,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--background-color);
+  background: transparent !important;
   padding: 2rem;
 }
 
@@ -219,6 +219,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--background-color, #f5f6fa);
+  background: transparent !important;
   padding: 2rem;
 }
